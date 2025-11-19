@@ -1,32 +1,22 @@
 <template>
-  <form @submit.prevent="signup">
-    <div>
-      <label for="nome">nome</label>
-      <input type="text" id="nome" v-model="nome" required />
-    </div>
-    <div>
-      <label for="email">email</label>
-      <input type="email" id="email" v-model.trim="email" required />
-    </div>
-    <div>
-      <label for="senha">senha</label>
-      <input type="password" id="senha" v-model.trim="senha" required />
-    </div>
-    <button>Cadastrar</button>
-  </form>
-
-  <p v-if="errorMessage">{{ errorMessage }}</p>
+  <div></div>
+  <!-- <base-card
+    :is-signup="true"
+    :name="name"
+    :email="email"
+    :password="password"
+    @click="signup"
+  ></base-card> -->
 </template>
 
 <script>
 import handleError from '@/utils/errors/errors'
-
 export default {
   data() {
     return {
-      nome: '',
+      name: '',
       email: '',
-      senha: '',
+      password: '',
       errorMessage: null,
     }
   },
@@ -34,21 +24,14 @@ export default {
     async signup() {
       try {
         await this.$store.dispatch('auth/signup', {
-          nome: this.nome,
+          nome: this.name,
           email: this.email,
-          senha: this.senha,
+          password: this.password,
         })
-        this.cleanForm()
+        this.$router.replace({ name: 'login' })
       } catch (error) {
         this.errorMessage = handleError(error.message)
-        console.error('signup: ', error.message)
       }
-    },
-
-    cleanForm() {
-      this.nome = ''
-      this.email = ''
-      this.senha = ''
     },
   },
 }

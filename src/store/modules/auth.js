@@ -1,5 +1,6 @@
 const firebaseUrl = import.meta.env.VITE_APP_FIREBASE
 const signupUrl = import.meta.env.VITE_APP_SIGNUP
+const signIn = import.meta.env.VITE_APP_SIGNIN
 
 function createInitialUser() {
   return {
@@ -21,6 +22,7 @@ export default {
     login(state, payload) {
       state.user = payload
     },
+
     logoff(state) {
       state.user = createInitialUser()
     },
@@ -33,7 +35,7 @@ export default {
           method: 'POST',
           body: JSON.stringify({
             email: payload.email,
-            password: payload.senha,
+            password: payload.password,
             returnSecureToken: true,
           }),
         })
@@ -48,7 +50,7 @@ export default {
           idToken: data?.idToken,
           email: data?.email,
           localId: data?.localId,
-          name: payload.nome,
+          name: payload.name,
         })
       } catch (err) {
         console.error('signup: ', err)
@@ -63,19 +65,40 @@ export default {
           method: 'PUT',
           body: JSON.stringify(payload),
         })
+
         const data = await response.json()
         if (!response.ok) {
-          console.log(data)
           throw new Error(data)
         }
-      } catch (error) {
-        console.error('register: ', error)
-        throw error
+      } catch (err) {
+        console.error('register: ', err)
+        throw err
       }
     },
 
     async login(context, payload) {
-      context.commit('login', payload)
+      try {
+        const response = await fetch(signIn, {
+          method: 'POST',
+          body: JSON.stringify({ ...payload, returnSecureToken: true }),
+        })
+
+        const data = await response.json()
+        if (!response.ok) {
+          const errorMessage = data.error.message
+          throw new Error(errorMessage)
+        }
+
+        context.commit('login', {
+          userId: data.localId,
+          idToken: data.idToken,
+          expiresIn: data.expiresIn,
+          isLogged: true,
+        })
+      } catch (err) {
+        console.error('login: ', err)
+        throw err
+      }
     },
 
     logoff(context) {
@@ -83,5 +106,13 @@ export default {
     },
   },
 
-  getters: {},
+  getters: {
+    getUserData(state) {
+      return state.user
+    },
+
+    isLogged(state) {
+      return state.user.isLogged
+    },
+  },
 }
