@@ -76,8 +76,9 @@ export default {
 
         this.$router.replace({ name: 'home' })
       } catch (error) {
-        this.loading = false
         this.errorMessage = handleError(error.message)
+      } finally {
+        this.loading = false
       }
     },
   },

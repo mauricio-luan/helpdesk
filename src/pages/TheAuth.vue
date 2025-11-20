@@ -1,9 +1,5 @@
 <template>
-  <form @submit.prevent="signup">
-    <!-- <div>
-      <label for="nome">nome</label>
-      <input type="text" id="nome" v-model="nome" required />
-    </div> -->
+  <form @submit.prevent="submitForm">
     <div>
       <label for="email">email</label>
       <input type="email" id="email" v-model.trim="email" required />
@@ -15,31 +11,44 @@
     <button>Cadastrar</button>
   </form>
 
+  <p v-if="successMessage">{{ successMessage }}</p>
   <p v-if="errorMessage">{{ errorMessage }}</p>
 </template>
 
 <script>
 import handleError from '@/utils/errors/errors'
+import { createAccount } from '@/api/authService'
+
 export default {
   data() {
     return {
-      // name: '',
       email: '',
       password: '',
+      successMessage: null,
       errorMessage: null,
+      isLoading: false,
     }
   },
+
   methods: {
-    async signup() {
+    async submitForm() {
       try {
-        await this.$store.dispatch('auth/signup', {
-          // nome: this.name,
+        this.isLoading = true
+
+        await createAccount({
           email: this.email,
           password: this.password,
         })
+
+        this.successMessage = 'Conta criada com sucesso!'
+        console.log(this.successMessage)
+
         this.$router.replace({ name: 'login' })
       } catch (error) {
         this.errorMessage = handleError(error.message)
+        console.error(this.errorMessage)
+      } finally {
+        this.isLoading = false
       }
     },
   },
