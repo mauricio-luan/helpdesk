@@ -8,6 +8,7 @@ const errorResponses = {
   INVALID_PASSWORD: 'The password is invalid or the user does not have a password.',
   USER_DISABLED: 'The user account has been disabled by an administrator.',
   INVALID_LOGIN_CREDENTIALS: 'Email or password is incorrect. Please try again.',
+  NETWORK_ERROR: 'Please check your internet connection and try again.',
 }
 
 function handleError(errorMessage) {

@@ -1,5 +1,6 @@
+import * as authService from '@/api/authService'
+
 const firebaseUrl = import.meta.env.VITE_APP_FIREBASE
-const signupUrl = import.meta.env.VITE_APP_SIGNUP
 const signIn = import.meta.env.VITE_APP_SIGNIN
 
 function createInitialUser() {
@@ -29,35 +30,23 @@ export default {
   },
 
   actions: {
+    /* solicita cadastro do usuario e salvamento no db */
     async signup(context, payload) {
       try {
-        const response = await fetch(signupUrl, {
-          method: 'POST',
-          body: JSON.stringify({
-            email: payload.email,
-            password: payload.password,
-            returnSecureToken: true,
-          }),
-        })
+        const response = await authService.signup(payload)
 
-        const data = await response.json()
-        if (!response.ok) {
-          const errorMessage = data.error.message
-          throw new Error(errorMessage)
-        }
-
-        await context.dispatch('register', {
-          idToken: data?.idToken,
-          email: data?.email,
-          localId: data?.localId,
-          name: payload.name,
-        })
+        // await context.dispatch('register', {
+        //   idToken: response.idToken,
+        //   email: response.email,
+        //   localId: response.localId,
+        // })
       } catch (err) {
-        console.error('signup: ', err)
+        console.error('action signup: ', err)
         throw err
       }
     },
 
+    /* registra o usuario recem-cadastrado no banco de dados*/
     async register(_context, payload) {
       try {
         const localId = payload.localId
