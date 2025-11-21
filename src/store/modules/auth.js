@@ -63,6 +63,10 @@ export default {
       return state.user.email
     },
 
+    getUserIdToken(state) {
+      return state.user.idToken
+    },
+
     isLogged(state) {
       return state.user.isLogged
     },

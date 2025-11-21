@@ -3,7 +3,7 @@ Entidade: Ticket
 
 title: String
 content: String
-createdAt: Timestamp
+priority: string
 Snapshot do Autor:
   authorId: String (ID do usuário)
   authorEmail: String (Para exibir na lista sem buscar no banco de users)
@@ -11,7 +11,7 @@ Snapshot do Autor:
 -->
 <template>
   <section>
-    <form @submit.prevent>
+    <form @submit.prevent="submitForm()">
       <div>
         <label for="title">Titulo: </label>
         <input type="text" name="title" id="title" v-model="title" />
@@ -28,6 +28,8 @@ Snapshot do Autor:
           <option :value="priorities.HIGH">Alta</option>
         </select>
       </div>
+
+      <button>Criar</button>
     </form>
   </section>
 </template>
@@ -35,6 +37,7 @@ Snapshot do Autor:
 <script>
 import { mapGetters } from 'vuex'
 import { ticketConstants } from '@/constants/ticket'
+import * as ticketService from '@/api/ticketService'
 
 export default {
   name: 'TicketForm',
@@ -44,7 +47,7 @@ export default {
       title: '',
       content: '',
       priority: 'low',
-      analysts: [],
+      // analysts: [],
       priorities: null,
     }
   },
@@ -55,7 +58,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters('auth', ['getUserId', 'getUserEmail']),
+    ...mapGetters('auth', ['getUserId', 'getUserEmail', 'getUserIdToken']),
+  },
+
+  methods: {
+    async submitForm() {
+      try {
+        const ticketPayload = {
+          title: this.title,
+          content: this.content,
+          priority: this.priority,
+          authorId: this.getUserId,
+          authorEmail: this.getUserEmail,
+        }
+
+        await ticketService.createTicket(ticketPayload, this.getUserIdToken)
+
+        alert('chamado criado!')
+      } catch (error) {
+        console.error(error)
+      }
+    },
   },
 }
 </script>

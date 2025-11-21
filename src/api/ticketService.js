@@ -23,9 +23,9 @@ import axios from 'axios'
 
 const FIREBASE_URL = import.meta.env.VITE_API_FIREBASE
 
-export const createTicket = async (ticket) => {
+export const createTicket = async (ticket, userToken) => {
   try {
-    const url = `${FIREBASE_URL}/tickets.json`
+    const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
 
     const response = await axios.post(url, {
       ...ticket,
@@ -33,10 +33,11 @@ export const createTicket = async (ticket) => {
       createdAt: new Date().toISOString(),
     })
 
+    console.log(response.data)
     return response.data
   } catch (error) {
     if (error.response) {
-      const ticketServiceError = error.response.data.error.message
+      const ticketServiceError = error.response.data
 
       console.error('ticketService: ', ticketServiceError)
       throw new Error(ticketServiceError)
