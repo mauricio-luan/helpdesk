@@ -3,6 +3,7 @@ import * as authService from '@/api/authService'
 function createInitialUser() {
   return {
     userId: null,
+    email: null,
     idToken: null,
     expiresIn: null,
     isLogged: false,
@@ -35,6 +36,7 @@ export default {
           userId: data.localId,
           idToken: data.idToken,
           expiresIn: data.expiresIn,
+          email: payload.email,
           isLogged: true,
         })
       } catch (err) {
@@ -51,6 +53,14 @@ export default {
   getters: {
     getUserData(state) {
       return state.user
+    },
+
+    getUserId(state) {
+      return state.user.userId
+    },
+
+    getUserEmail(state) {
+      return state.user.email
     },
 
     isLogged(state) {

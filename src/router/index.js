@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store/store'
+
 import TheHome from '@/pages/TheHome.vue'
 import TheAuth from '@/pages/TheAuth.vue'
 
@@ -18,6 +19,12 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/components/LoginForm.vue'),
+    },
+    {
+      path: '/newticket',
+      name: 'newticket',
+      component: () => import('@/components/TicketForm.vue'),
+      meta: { requiresAuth: true },
     },
   ],
 })
