@@ -36,7 +36,7 @@ Snapshot do Autor:
 
 <script>
 import { mapGetters } from 'vuex'
-import { ticketConstants } from '@/constants/ticket'
+import { ticketConstants } from '@/constants/constants'
 import * as ticketService from '@/api/ticketService'
 
 export default {

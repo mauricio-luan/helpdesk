@@ -1,18 +1,4 @@
 /*
-Entidade: Ticket (/tickets/{ticketHash})
-
-id: (Hash do Firebase)
-title: String
-content: String
-status: String (ex: "open")
-createdAt: Timestamp
-Snapshot do Autor:
-  authorId: String (ID do usuário)
-  authorEmail: String (Para exibir na lista sem buscar no banco de users)
-  assignedTo: String/Null (ID do técnico responsável)
-
--------------------------------------
-
 Entidade: Histórico (/ticket_history/{ticketHash}/{logHash})
 action: String (ex: "criado", "assumido", "respondido")
 timestamp: Timestamp
@@ -27,19 +13,43 @@ export const createTicket = async (ticket, userToken) => {
   try {
     const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
 
-    const response = await axios.post(url, {
+    const data = {
       ...ticket,
       status: 'open',
       createdAt: new Date().toISOString(),
-    })
+    }
 
-    console.log(response.data)
+    const response = await axios.post(url, data)
+
     return response.data
   } catch (error) {
     if (error.response) {
       const ticketServiceError = error.response.data
 
-      console.error('ticketService: ', ticketServiceError)
+      console.error('createTicket: ', ticketServiceError)
+      throw new Error(ticketServiceError)
+    } else if (error.request) {
+      console.error('request: ', error.request)
+      throw new Error('NETWORK_ERROR')
+    } else {
+      console.error('Erro desconhecido: ', error)
+      throw error
+    }
+  }
+}
+
+export const getTickets = async (userToken) => {
+  try {
+    const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
+
+    const response = await axios.get(url)
+
+    return response.data
+  } catch (error) {
+    if (error.response) {
+      const ticketServiceError = error.response.data
+
+      console.error('getTickets: ', ticketServiceError)
       throw new Error(ticketServiceError)
     } else if (error.request) {
       console.error('request: ', error.request)

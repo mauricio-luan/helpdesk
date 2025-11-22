@@ -13,6 +13,13 @@ const router = createRouter({
       name: 'home',
       component: TheHome,
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: () => import('@/pages/TheDashboard.vue'),
+        },
+      ],
     },
     { path: '/auth', name: 'auth', component: TheAuth },
     {
