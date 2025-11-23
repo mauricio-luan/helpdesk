@@ -74,7 +74,7 @@ export default {
           password: this.password,
         })
 
-        this.$router.replace({ name: 'home' })
+        this.$router.replace({ name: 'dashboard' })
       } catch (error) {
         this.errorMessage = handleError(error.message)
       } finally {

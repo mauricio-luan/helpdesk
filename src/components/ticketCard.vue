@@ -1,7 +1,50 @@
 <template>
-  <div></div>
+  <section>
+    <p v-if="errorMessage">{{ errorMessage }}</p>
+
+    <ul v-else>
+      <li v-for="ticket in tickets" :key="ticket.id">
+        {{ ticket.title }}
+      </li>
+    </ul>
+  </section>
 </template>
+
 <script>
-export default {}
+import * as ticketService from '@/api/ticketService'
+import { mapGetters } from 'vuex'
+
+export default {
+  data() {
+    return {
+      tickets: [],
+      loading: false,
+      errorMessage: null,
+    }
+  },
+
+  created() {
+    this.getTickets()
+  },
+
+  computed: {
+    ...mapGetters('auth', ['getUserIdToken']),
+  },
+
+  methods: {
+    async getTickets() {
+      try {
+        this.errorMessage = null
+        this.loading = true
+
+        this.tickets = await ticketService.getTickets(this.getUserIdToken)
+      } catch (error) {
+        this.errorMessage = error
+        console.error(error)
+      } finally {
+        this.loading = false
+      }
+    },
+  },
+}
 </script>
-<style lang=""></style>

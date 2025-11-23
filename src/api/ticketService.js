@@ -24,15 +24,10 @@ export const createTicket = async (ticket, userToken) => {
     return response.data
   } catch (error) {
     if (error.response) {
-      const ticketServiceError = error.response.data
-
-      console.error('createTicket: ', ticketServiceError)
-      throw new Error(ticketServiceError)
+      throw new Error(error.response.data)
     } else if (error.request) {
-      console.error('request: ', error.request)
       throw new Error('NETWORK_ERROR')
     } else {
-      console.error('Erro desconhecido: ', error)
       throw error
     }
   }
@@ -41,21 +36,20 @@ export const createTicket = async (ticket, userToken) => {
 export const getTickets = async (userToken) => {
   try {
     const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
-
     const response = await axios.get(url)
 
-    return response.data
+    if (response.data === null) return []
+
+    const responseArray = Object.entries(response.data)
+    const tickets = responseArray.map((ticket) => ({ id: ticket[0], ...ticket[1] }))
+
+    return tickets
   } catch (error) {
     if (error.response) {
-      const ticketServiceError = error.response.data
-
-      console.error('getTickets: ', ticketServiceError)
-      throw new Error(ticketServiceError)
+      throw new Error(error.response.data)
     } else if (error.request) {
-      console.error('request: ', error.request)
       throw new Error('NETWORK_ERROR')
     } else {
-      console.error('Erro desconhecido: ', error)
       throw error
     }
   }

@@ -1,35 +1,15 @@
 <template>
   <div>
-    <div><h1>Tickets</h1></div>
+    <h1>Tickets</h1>
 
-    <div>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione nemo tenetur pariatur
-      voluptatum accusamus, omnis officiis, earum excepturi voluptate ab suscipit quae dolores
-      possimus repellat nisi commodi voluptatem! Repudiandae, accusamus.
-    </div>
+    <ticket-card></ticket-card>
   </div>
 </template>
 <script>
-import * as ticketService from '@/api/ticketService'
+import TicketCard from '@/components/TicketCard.vue'
 
 export default {
-  data() {
-    return {
-      tickets: [],
-    }
-  },
-
-  created() {
-    this.getTickets()
-  },
-  methods: {
-    async getTickets() {
-      const userToken = this.$store.getters['auth/getUserIdToken']
-      console.log(userToken)
-      const tickets = await ticketService.getTickets(userToken)
-      console.log(tickets)
-    },
-  },
+  components: { TicketCard },
 }
 </script>
 <style lang=""></style>
