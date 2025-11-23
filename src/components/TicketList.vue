@@ -2,9 +2,12 @@
   <section>
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
+    <!-- no futuro renderizar um card pra cada ticket inves de lista -->
     <ul v-else>
       <li v-for="ticket in tickets" :key="ticket.id">
-        {{ ticket.title }}
+        <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
+          {{ ticket.title }} || {{ ticket.priority }}
+        </router-link>
       </li>
     </ul>
   </section>

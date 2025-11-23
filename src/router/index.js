@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import store from '@/store/store'
 
 import TheHome from '@/pages/TheHome.vue'
@@ -7,7 +8,10 @@ import TheAuth from '@/pages/TheAuth.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: 'home' },
+    {
+      path: '/',
+      redirect: 'home',
+    },
     {
       path: '/home',
       name: 'home',
@@ -19,9 +23,18 @@ const router = createRouter({
           name: 'dashboard',
           component: () => import('@/pages/TheDashboard.vue'),
         },
+        {
+          path: 'ticket/:id',
+          name: 'ticket-detail',
+          component: () => import('@/pages/TicketDetail.vue'),
+        },
       ],
     },
-    { path: '/auth', name: 'auth', component: TheAuth },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: TheAuth,
+    },
     {
       path: '/login',
       name: 'login',
@@ -38,9 +51,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isLogged = store.getters['auth/isLogged']
+  // const logged = localStorage.getItem('isLogged')
 
   if (to.name === 'login' && isLogged) {
-    next('/home')
+    next({ name: 'dashboard' })
   } else if (to.meta.requiresAuth && !isLogged) {
     next('/login')
   } else {

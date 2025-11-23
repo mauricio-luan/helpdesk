@@ -32,13 +32,18 @@ export default {
       try {
         const data = await authService.signin(payload)
 
-        context.commit('login', {
+        const user = {
           userId: data.localId,
           idToken: data.idToken,
           expiresIn: data.expiresIn,
           email: payload.email,
           isLogged: true,
-        })
+        }
+
+        context.commit('login', user)
+
+        //ver localStorage mais a frente
+        // localStorage.setItem('isLogged', user.isLogged)
       } catch (err) {
         console.error('login: ', err)
         throw err
@@ -47,6 +52,7 @@ export default {
 
     logoff(context) {
       context.commit('logoff')
+      //localStorage.removeItem('isLogged')
     },
   },
 

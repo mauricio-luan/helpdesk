@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import TicketCard from '@/components/TicketCard.vue'
+import TicketCard from '@/components/TicketList.vue'
 
 export default {
   components: { TicketCard },

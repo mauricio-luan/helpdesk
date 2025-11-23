@@ -1,4 +1,6 @@
 <template>
+  <the-header></the-header>
+
   <h1>Home</h1>
   <div>
     <router-link :to="{ name: 'newticket' }">criar novo ticket</router-link>
