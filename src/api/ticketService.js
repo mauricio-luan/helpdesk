@@ -54,3 +54,18 @@ export const getTickets = async (userToken) => {
     }
   }
 }
+
+export const getTicketById = async (ticketId, userToken) => {
+  try {
+    const url = `${FIREBASE_URL}/tickets/${ticketId}.json?auth=${userToken}`
+    const response = await axios.get(url)
+
+    return {
+      id: ticketId,
+      ...response.data,
+    }
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

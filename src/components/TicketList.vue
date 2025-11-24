@@ -2,36 +2,39 @@
   <section>
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
-    <!-- no futuro renderizar um card pra cada ticket inves de lista -->
     <ul v-else>
-      <li v-for="ticket in tickets" :key="ticket.id">
-        <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
-          {{ ticket.title }} || {{ ticket.priority }}
-        </router-link>
-      </li>
+      <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" />
     </ul>
   </section>
 </template>
 
 <script>
-import * as ticketService from '@/api/ticketService'
 import { mapGetters } from 'vuex'
+import TicketCard from './TicketCard.vue'
 
 export default {
+  components: { TicketCard },
+
   data() {
     return {
-      tickets: [],
       loading: false,
       errorMessage: null,
     }
   },
 
   created() {
-    this.getTickets()
+    if (!this.hasTickets) {
+      this.getTickets()
+    }
   },
 
   computed: {
     ...mapGetters('auth', ['getUserIdToken']),
+    ...mapGetters('tickets', ['hasTickets', 'getAllTickets']),
+
+    tickets() {
+      return this.getAllTickets
+    },
   },
 
   methods: {
@@ -40,7 +43,7 @@ export default {
         this.errorMessage = null
         this.loading = true
 
-        this.tickets = await ticketService.getTickets(this.getUserIdToken)
+        await this.$store.dispatch('tickets/fetchTickets')
       } catch (error) {
         this.errorMessage = error
         console.error(error)
