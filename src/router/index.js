@@ -28,6 +28,19 @@ const router = createRouter({
           name: 'ticket-detail',
           component: () => import('@/pages/TicketDetail.vue'),
         },
+        {
+          path: 'edit/:id',
+          name: 'edit-ticket',
+          component: () => import('@/components/TicketEdit.vue'),
+        },
+
+        /*
+        Entidade: Histórico (/ticket_history/{ticketHash}/{logHash})
+        action: String (ex: "criado", "assumido", "respondido")
+        timestamp: Timestamp
+        userEmail: String (Quem fez a ação)
+        details: String (ex: "Mudou status de Aberto para Em Análise")
+        */
       ],
     },
     {

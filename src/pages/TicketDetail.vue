@@ -35,6 +35,12 @@
       <p>{{ getCurrentTicket.authorEmail }}</p>
     </span>
   </section>
+
+  <div>
+    <button @click="$router.push({ name: 'edit-ticket', params: { id: getCurrentTicket.id } })">
+      Editar
+    </button>
+  </div>
 </template>
 
 <script>

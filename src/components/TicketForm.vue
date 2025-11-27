@@ -1,14 +1,3 @@
-<!--
-Entidade: Ticket
-
-title: String
-content: String
-priority: string
-Snapshot do Autor:
-  authorId: String (ID do usuário)
-  authorEmail: String (Para exibir na lista sem buscar no banco de users)
-  assignedTo: String/Null (ID do técnico responsável) ???
--->
 <template>
   <section>
     <form @submit.prevent="submitForm()">
@@ -41,6 +30,10 @@ import * as ticketService from '@/api/ticketService'
 
 export default {
   name: 'TicketForm',
+
+  props: {
+    mode: { type: String, required: true, default: 'create' },
+  },
 
   data() {
     return {
