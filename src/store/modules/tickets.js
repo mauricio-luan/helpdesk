@@ -43,6 +43,37 @@ export default {
         throw error
       }
     },
+
+    //parei nessa funcao
+    async updateTicket(context, updatedTicket) {
+      const currentTicket = context.getters.getCurrentTicket
+      const updatedTicketKeys = Object.keys(updatedTicket)
+      const ignoredFields = ['editedBy', 'authorId', 'authorEmail', 'createdAt', 'id']
+
+      const updatedValues = []
+      for (const key of updatedTicketKeys) {
+        if (ignoredFields.includes(key)) continue
+
+        if (updatedTicket[key] !== currentTicket[key]) {
+          updatedValues.push({
+            property: key,
+            from: currentTicket[key],
+            to: updatedTicketKeys[key],
+          })
+        }
+      }
+
+      if (updatedValues.length > 0) {
+        const log = {
+          ticketId: updatedTicket.id,
+          editedBy: updatedTicket.editedBy,
+          date: new Date().toISOString(),
+          log: updatedValues,
+        }
+
+        await setUpdateTicket(log)
+      }
+    },
   },
 
   getters: {

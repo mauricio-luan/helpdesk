@@ -85,9 +85,10 @@ export default {
           ...this.form,
           editedBy: this.getUserId,
         }
+        console.log(payload)
 
         await this.$store.dispatch('tickets/updateTicket', payload)
-        this.$router.replace({ name: 'ticket-detail', params: { id: this.$route.params.id } })
+        // this.$router.replace({ name: 'ticket-detail', params: { id: this.$route.params.id } })
       } catch (error) {
         console.log(error)
         throw error
