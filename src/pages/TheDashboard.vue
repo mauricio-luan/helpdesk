@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <h1>Tickets</h1>
-
-    <ticket-card></ticket-card>
-  </div>
+  <TicketList />
 </template>
+
 <script>
-import TicketCard from '@/components/TicketList.vue'
+import TicketList from '@/components/TicketList.vue'
 
 export default {
-  components: { TicketCard },
+  components: { TicketList },
 }
 </script>
-<style lang=""></style>

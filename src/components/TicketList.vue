@@ -2,9 +2,9 @@
   <section>
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
-    <ul v-else>
+    <v-list v-else>
       <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" />
-    </ul>
+    </v-list>
   </section>
 </template>
 

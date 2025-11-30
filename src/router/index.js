@@ -24,6 +24,11 @@ const router = createRouter({
           component: () => import('@/pages/TheDashboard.vue'),
         },
         {
+          path: 'newticket',
+          name: 'newticket',
+          component: () => import('@/components/TicketForm.vue'),
+        },
+        {
           path: 'ticket/:id',
           name: 'ticket-detail',
           component: () => import('@/pages/TicketDetail.vue'),
@@ -58,12 +63,12 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/components/LoginForm.vue'),
     },
-    {
+    /* {
       path: '/newticket',
       name: 'newticket',
       component: () => import('@/components/TicketForm.vue'),
       meta: { requiresAuth: true },
-    },
+    }, */
   ],
 })
 

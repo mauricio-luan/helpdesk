@@ -65,7 +65,7 @@ export default {
           authorEmail: this.getUserEmail,
         }
 
-        await ticketService.createTicket(ticketPayload, this.getUserIdToken)
+        await ticketService.createTicket(this.getUserIdToken, ticketPayload)
 
         alert('chamado criado!')
       } catch (error) {
