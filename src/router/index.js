@@ -33,6 +33,11 @@ const router = createRouter({
           name: 'edit-ticket',
           component: () => import('@/components/TicketEdit.vue'),
         },
+        {
+          path: 'history/:ticketId',
+          name: 'ticket-history',
+          component: () => import('@/components/TicketHistory.vue'),
+        },
 
         /*
         Entidade: Histórico (/ticket_history/{ticketHash}/{logHash})

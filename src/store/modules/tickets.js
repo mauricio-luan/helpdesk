@@ -44,34 +44,43 @@ export default {
       }
     },
 
-    //parei nessa funcao
-    async updateTicket(context, updatedTicket) {
-      const currentTicket = context.getters.getCurrentTicket
-      const updatedTicketKeys = Object.keys(updatedTicket)
-      const ignoredFields = ['editedBy', 'authorId', 'authorEmail', 'createdAt', 'id']
+    async updateTicket(context, ticket) {
+      try {
+        const currentTicket = context.getters.getCurrentTicket
+        const userToken = context.rootGetters['auth/getUserIdToken']
 
-      const updatedValues = []
-      for (const key of updatedTicketKeys) {
-        if (ignoredFields.includes(key)) continue
+        const updatedTicketKeys = Object.keys(ticket)
+        const ignoredFields = ['authorId', 'authorEmail', 'createdAt', 'id']
 
-        if (updatedTicket[key] !== currentTicket[key]) {
-          updatedValues.push({
-            property: key,
-            from: currentTicket[key],
-            to: updatedTicketKeys[key],
-          })
-        }
-      }
+        const updatedValues = []
+        for (const key of updatedTicketKeys) {
+          if (ignoredFields.includes(key)) continue
 
-      if (updatedValues.length > 0) {
-        const log = {
-          ticketId: updatedTicket.id,
-          editedBy: updatedTicket.editedBy,
-          date: new Date().toISOString(),
-          log: updatedValues,
+          if (ticket[key] !== currentTicket[key]) {
+            updatedValues.push({
+              field: key,
+              from: currentTicket[key],
+              to: ticket[key],
+            })
+          }
         }
 
-        await setUpdateTicket(log)
+        if (updatedValues.length > 0) {
+          const log = {
+            ticketId: ticket.id,
+            editedBy: context.rootGetters['auth/getUserEmail'],
+            date: new Date().toISOString(),
+            log: updatedValues,
+          }
+
+          await ticketService.updateTicket(userToken, ticket)
+          await ticketService.createLog(userToken, log)
+
+          await context.dispatch('fetchTickets')
+        }
+      } catch (error) {
+        console.error(error)
+        throw error
       }
     },
   },

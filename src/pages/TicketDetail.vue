@@ -1,5 +1,12 @@
 <template>
   <section>
+    <div>
+      <button
+        @click="$router.push({ name: 'ticket-history', params: { ticketId: $route.params.id } })"
+      >
+        log de alteracoes
+      </button>
+    </div>
     <span>
       <strong>Protocolo: </strong>
       <p>#46783</p>
@@ -60,10 +67,13 @@ export default {
     // ticket necessário. Mantenho o template simples usando apenas getCurrentTicket.
     async fetchTicket(ticketId) {
       try {
+        console.log('executando fetchTicket')
         if (!this.hasTickets) {
           await this.$store.dispatch('tickets/fetchTicket', ticketId)
+          console.log('nao tinha tickets no state')
         } else {
           this.$store.commit('tickets/setCurrentTicket', this.getTicketById(ticketId))
+          console.log('tinha tickets no state, comitando')
         }
       } catch (error) {
         console.error(error)

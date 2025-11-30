@@ -1,15 +1,8 @@
-/*
-Entidade: Histórico (/ticket_history/{ticketHash}/{logHash})
-action: String (ex: "criado", "assumido", "respondido")
-timestamp: Timestamp
-userEmail: String (Quem fez a ação)
-details: String (ex: "Mudou status de Aberto para Em Análise")
-*/
 import axios from 'axios'
 
 const FIREBASE_URL = import.meta.env.VITE_API_FIREBASE
 
-export const createTicket = async (ticket, userToken) => {
+export const createTicket = async (userToken, ticket) => {
   try {
     const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
 
@@ -19,9 +12,39 @@ export const createTicket = async (ticket, userToken) => {
       createdAt: new Date().toISOString(),
     }
 
-    const response = await axios.post(url, data)
+    await axios.post(url, data)
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data)
+    } else if (error.request) {
+      throw new Error('NETWORK_ERROR')
+    } else {
+      throw error
+    }
+  }
+}
 
-    return response.data
+export const updateTicket = async (userToken, ticket) => {
+  try {
+    const url = `${FIREBASE_URL}/tickets/${ticket.id}.json?auth=${userToken}`
+
+    await axios.put(url, ticket)
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data)
+    } else if (error.request) {
+      throw new Error('NETWORK_ERROR')
+    } else {
+      throw error
+    }
+  }
+}
+
+export const createLog = async (userToken, ticketLog) => {
+  try {
+    const url = `${FIREBASE_URL}/ticket-history/${ticketLog.ticketId}.json?auth=${userToken}`
+
+    await axios.post(url, ticketLog)
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data)
@@ -65,7 +88,32 @@ export const getTicketById = async (ticketId, userToken) => {
       ...response.data,
     }
   } catch (error) {
-    console.error(error)
-    throw error
+    if (error.response) {
+      throw new Error(error.response.data)
+    } else if (error.request) {
+      throw new Error('NETWORK_ERROR')
+    } else {
+      throw error
+    }
+  }
+}
+
+export const getTicketLog = async (userToken, ticketId) => {
+  try {
+    console.log(userToken, ticketId)
+    const url = `${FIREBASE_URL}/ticket-history/${ticketId}.json?auth=${userToken}`
+    const response = await axios.get(url)
+
+    console.log(response.data)
+
+    return response.data
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data)
+    } else if (error.request) {
+      throw new Error('NETWORK_ERROR')
+    } else {
+      throw error
+    }
   }
 }

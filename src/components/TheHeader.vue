@@ -1,7 +1,9 @@
 <template>
   <header>
     <div>
-      <h1>Meu cabeçalho fodastico</h1>
+      <h1>
+        <router-link :to="{ name: 'dashboard' }">Meu cabeçalho fodastico</router-link>
+      </h1>
     </div>
     <div>
       <button @click="logoff">Logout</button>
