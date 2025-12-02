@@ -1,37 +1,41 @@
 <template>
-  <h1>Editando ticket</h1>
-  <!--
-  {
-    "id": "-Oei8M3b5myMljdKcxEG",
-    "authorEmail": "mauricioluan2023@gmail.com",
-    "authorId": "7EGTDqKSMLOcHJBcldoHNQZJyyB2",
-    "content": "solicito alteração da rota de todas as bandeeiras para Vero.\n\nlogico 23894798274",
-    "createdAt": "2025-11-23T00:37:59.525Z",
-    "priority": "medium",
-    "status": "open",
-    "title": "Troca de adquirente - VERO"
-} -->
-  <form @submit.prevent="submitForm()">
-    <div>
-      <label for="title">Titulo: </label>
-      <input type="text" name="title" id="title" v-model="form.title" />
-    </div>
-    <div>
-      <label for="content">Conteudo: </label><br />
-      <textarea name="content" id="content" v-model="form.content" rows="20" />
-    </div>
-    <div>
-      <label for="priority">Prioridade: </label>
-      <select name="priority" id="priority" v-model="form.priority">
-        <option :value="priorities.LOW">Baixa</option>
-        <option :value="priorities.MEDIUM">Media</option>
-        <option :value="priorities.HIGH">Alta</option>
-      </select>
-    </div>
+  <v-container>
+    <v-form @submit.prevent="submitForm()">
+      <h2>Editando ticket #protocol do ticket aqui</h2>
 
-    <button>Salvar</button>
-    <button @click="finishTicket">Finalizar</button>
-  </form>
+      <v-row>
+        <v-col cols="8">
+          <v-text-field label="Titulo" variant="outlined" v-model="form.title"></v-text-field>
+        </v-col>
+        <v-col cols="4">
+          <v-select
+            label="Prioridade"
+            variant="outlined"
+            v-model="form.priority"
+            :items="priorities"
+          ></v-select>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <v-textarea
+            label="Conteúdo"
+            variant="outlined"
+            rows="10"
+            v-model="form.content"
+          ></v-textarea>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" class="d-flex justify-end">
+          <v-btn color="primary" prepend-icon="mdi-content-save" text="Salvar alterações" />
+          <v-btn color="error" prepend-icon="mdi-close-circle" text="Finalizar" class="ml-4" />
+        </v-col>
+      </v-row>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -42,7 +46,7 @@ import handleError from '@/utils/errors/errors'
 export default {
   data() {
     return {
-      priorities: ticketConstants,
+      priorities: Object.values(ticketConstants),
       form: {},
       loading: false,
       errorMessage: '',

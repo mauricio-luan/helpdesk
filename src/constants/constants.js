@@ -1,5 +1,5 @@
 export const ticketConstants = Object.freeze({
-  HIGH: 'high',
-  MEDIUM: 'medium',
-  LOW: 'low',
+  HIGH: 'Alta',
+  MEDIUM: 'Media',
+  LOW: 'Baixa',
 })
