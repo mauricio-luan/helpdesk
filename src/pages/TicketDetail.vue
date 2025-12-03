@@ -1,4 +1,21 @@
+<!--
+
+O Desafio Prático: Refinar o Card de Ticket
+Vamos voltar àquele teu componente TicketCard.vue (ou a lista que estavas a fazer). Imagina um card individual de um ticket.
+
+A Missão: Quero que desenhes a estrutura de um card simples, mas aplicando a Hierarquia correta:
+
+Título do Ticket: Deve ser destacado, mas não gigante. Usa text-h6.
+
+Descrição: Texto normal. Usa text-body-2 (para caber mais texto).
+
+Rodapé (Data e Autor): Texto pequeno e discreto. Usa text-caption e uma cor mais clara (text-medium-emphasis).
+
+Espaçamento: Quero que o título tenha uma margem inferior (mb) para não colar na descrição. Escolhe um valor da régua de 4 (ex: 8px ou 12px).
+
+Consegues montar esse <v-card> aplicando estas classes de texto e espaçamento?-->
 <template>
+  <v-card> </v-card>
   <section>
     <div>
       <button
