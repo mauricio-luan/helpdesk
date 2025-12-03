@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store/store'
 
 import TheHome from '@/pages/TheHome.vue'
-import TheAuth from '@/pages/TheAuth.vue'
+// import TheAuth from '@/pages/TheAuth.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -48,19 +48,20 @@ const router = createRouter({
     {
       path: '/auth',
       name: 'auth',
-      component: TheAuth,
+      component: () => import('@/layout/AuthLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'login',
+          component: () => import('@/components/LoginForm.vue'),
+        },
+        {
+          path: 'register',
+          name: 'register',
+          component: () => import('@/pages/TheAuth.vue'),
+        },
+      ],
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/components/LoginForm.vue'),
-    },
-    /* {
-      path: '/newticket',
-      name: 'newticket',
-      component: () => import('@/components/TicketForm.vue'),
-      meta: { requiresAuth: true },
-    }, */
   ],
 })
 
@@ -71,7 +72,7 @@ router.beforeEach((to, from, next) => {
   if (to.name === 'login' && isLogged) {
     next({ name: 'dashboard' })
   } else if (to.meta.requiresAuth && !isLogged) {
-    next('/login')
+    next({ name: 'login' })
   } else {
     next()
   }

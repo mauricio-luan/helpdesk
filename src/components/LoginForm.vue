@@ -37,7 +37,7 @@
 
       <!-- No futuro inserir um alert -->
       <br />
-      <router-link :to="{ name: 'auth' }">Sign up</router-link>
+      <router-link :to="{ name: 'register' }">Sign up</router-link>
 
       <p v-if="errorMessage">
         {{ errorMessage }}
