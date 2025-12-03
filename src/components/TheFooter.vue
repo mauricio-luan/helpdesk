@@ -1,8 +1,8 @@
 <template>
-  <v-footer>
+  <v-footer app color="primary">
     <v-row>
       <v-col cols="12" sm="12" md="8" class="text-sm-center text-md-left">
-        <p>Copyright 2025 Maurício Dev</p>
+        <p>Copyright 2025 Maurício Luan</p>
       </v-col>
 
       <v-col sm="12" md="4" class="text-sm-center text-md-right">
@@ -13,7 +13,3 @@
     </v-row>
   </v-footer>
 </template>
-
-<script>
-export default {}
-</script>

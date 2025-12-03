@@ -26,7 +26,7 @@ const router = createRouter({
         {
           path: 'newticket',
           name: 'newticket',
-          component: () => import('@/components/TicketForm.vue'),
+          component: () => import('@/pages/TicketForm.vue'),
         },
         {
           path: 'ticket/:id',
@@ -36,21 +36,13 @@ const router = createRouter({
         {
           path: 'edit/:id',
           name: 'edit-ticket',
-          component: () => import('@/components/TicketEdit.vue'),
+          component: () => import('@/pages/TicketEdit.vue'),
         },
         {
           path: 'history/:ticketId',
           name: 'ticket-history',
-          component: () => import('@/components/TicketHistory.vue'),
+          component: () => import('@/pages/TicketHistory.vue'),
         },
-
-        /*
-        Entidade: Histórico (/ticket_history/{ticketHash}/{logHash})
-        action: String (ex: "criado", "assumido", "respondido")
-        timestamp: Timestamp
-        userEmail: String (Quem fez a ação)
-        details: String (ex: "Mudou status de Aberto para Em Análise")
-        */
       ],
     },
     {

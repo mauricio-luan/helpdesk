@@ -1,17 +1,28 @@
 <template>
-  <TheMenu />
+  <v-layout>
+    <TheHeader @toggle-drawer="drawer = !drawer" />
+    <TheMenu :drawer="drawer" />
 
-  <v-main>
-    <router-view></router-view>
-  </v-main>
+    <v-main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
 
-  <TheFooter />
+    <TheFooter />
+  </v-layout>
 </template>
 
 <script>
+import TheHeader from '@/components/layout/TheHeader.vue'
 import TheMenu from '@/components/layout/TheMenu.vue'
 import TheFooter from '@/components/layout/TheFooter.vue'
+
 export default {
-  components: { TheMenu, TheFooter },
+  components: { TheHeader, TheMenu, TheFooter },
+
+  data() {
+    return { drawer: true }
+  },
 }
 </script>

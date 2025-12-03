@@ -31,9 +31,9 @@ import * as ticketService from '@/api/ticketService'
 export default {
   name: 'TicketForm',
 
-  props: {
-    mode: { type: String, required: true, default: 'create' },
-  },
+  // props: {
+  //   mode: { type: String, required: true, default: 'create' },
+  // },
 
   data() {
     return {
