@@ -1,36 +1,27 @@
 <template>
-  <v-list-item>
-    <v-card hover width="1200" :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
-      <v-card-item>
-        <v-card-title></v-card-title>
-      </v-card-item>
+  <v-card hover :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
+    <v-card-text>
+      <v-row class="align-center">
+        <v-col cols="3"> #{{ ticket.id }}</v-col>
 
-      <v-card-text>
-        <v-label text="Assunto"></v-label>
-        {{ ticket.title }}
-      </v-card-text>
+        <v-col cols="3">
+          {{ ticket.title }}
+        </v-col>
 
-      <section>
-        <label for="protocol">Protocolo: </label>
-        <span>#76347</span>
-      </section>
+        <v-col cols="2">
+          {{ ticket.priority }}
+        </v-col>
 
-      <section>
-        <label for="title">Assunto: </label>
-        <span>{{ ticket.title }}</span>
-      </section>
+        <v-col cols="2">
+          {{ ticket.createdAt }}
+        </v-col>
 
-      <section>
-        <label for="priority">Prioridade: </label>
-        <span>{{ ticket.priority }}</span>
-      </section>
-
-      <section>
-        <label for="timedate">Data/Hora: </label>
-        <span>{{ ticket.createdAt }}</span>
-      </section>
-    </v-card>
-  </v-list-item>
+        <v-col cols="2">
+          <v-chip variant="flat" color="success">{{ ticket.status }}</v-chip>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

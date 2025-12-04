@@ -1,11 +1,47 @@
 <template>
-  <section>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+  <v-container>
+    <v-row class="px-4 py-2 font-weight-bold text-medium-emphasis">
+      <v-col cols="3">ID</v-col>
+      <v-col cols="3">Título</v-col>
+      <v-col cols="2">Prioridade</v-col>
+      <v-col cols="2">Data</v-col>
+      <v-col cols="2">Status</v-col>
+    </v-row>
 
-    <v-list v-else>
-      <TicketCard v-for="ticket in tickets" :key="ticket.id" :ticket="ticket" />
-    </v-list>
-  </section>
+    <v-data-iterator :items="tickets" :page="1" :items-per-page="5">
+      <template v-slot:default="{ items }">
+        <v-row>
+          <v-col v-for="(item, i) in items" :key="i" cols="12" md="12">
+            <TicketCard :ticket="item.raw" />
+          </v-col>
+        </v-row>
+      </template>
+
+      <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
+        <div class="d-flex align-center justify-center pa-4">
+          <v-btn
+            :disabled="page === 1"
+            icon="mdi-arrow-left"
+            density="comfortable"
+            variant="tonal"
+            rounded
+            @click="prevPage"
+          ></v-btn>
+
+          <div class="mx-2 text-caption">Página {{ page }} de {{ pageCount }}</div>
+
+          <v-btn
+            :disabled="page === pageCount"
+            icon="mdi-arrow-right"
+            density="comfortable"
+            variant="tonal"
+            rounded
+            @click="nextPage"
+          ></v-btn>
+        </div>
+      </template>
+    </v-data-iterator>
+  </v-container>
 </template>
 
 <script>
@@ -23,6 +59,7 @@ export default {
   },
 
   created() {
+    console.log(this.tickets)
     if (!this.hasTickets) {
       this.getTickets()
     }
