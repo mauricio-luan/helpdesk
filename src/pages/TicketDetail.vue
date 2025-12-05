@@ -1,74 +1,51 @@
-<!--
-
-O Desafio Prático: Refinar o Card de Ticket
-Vamos voltar àquele teu componente TicketCard.vue (ou a lista que estavas a fazer). Imagina um card individual de um ticket.
-
-A Missão: Quero que desenhes a estrutura de um card simples, mas aplicando a Hierarquia correta:
-
-Título do Ticket: Deve ser destacado, mas não gigante. Usa text-h6.
-
-Descrição: Texto normal. Usa text-body-2 (para caber mais texto).
-
-Rodapé (Data e Autor): Texto pequeno e discreto. Usa text-caption e uma cor mais clara (text-medium-emphasis).
-
-Espaçamento: Quero que o título tenha uma margem inferior (mb) para não colar na descrição. Escolhe um valor da régua de 4 (ex: 8px ou 12px).
-
-Consegues montar esse <v-card> aplicando estas classes de texto e espaçamento?-->
 <template>
-  <v-card> </v-card>
-  <section>
-    <div>
-      <button
-        @click="$router.push({ name: 'ticket-history', params: { ticketId: $route.params.id } })"
-      >
-        log de alteracoes
-      </button>
-    </div>
-    <span>
-      <strong>Protocolo: </strong>
-      <p>#46783</p>
-    </span>
+  <v-container fluid>
+    <v-row class="d-flex align-center">
+      <v-col cols="8">
+        <v-card-title>{{ getCurrentTicket.title }}</v-card-title>
+      </v-col>
 
-    <span>
-      <strong>Titulo: </strong>
-      <p>{{ getCurrentTicket.title }}</p>
-    </span>
+      <v-col cols="4">
+        <v-card-actions class="justify-end">
+          <v-btn color="success" @click="defineRoute('edit-ticket', getCurrentTicket.id)">
+            Editar
+          </v-btn>
+          <v-btn color="primary" @click="defineRoute('ticket-history', getCurrentTicket.id)">
+            Log
+          </v-btn>
+        </v-card-actions>
+      </v-col>
+    </v-row>
 
-    <span>
-      <strong>Descrição: </strong>
-      <p>{{ getCurrentTicket.content }}</p>
-    </span>
+    <v-row>
+      <v-col cols="8" md="8">
+        <v-card>
+          <v-card-title>Descrição</v-card-title>
+          <v-card-text>{{ getCurrentTicket.content }}</v-card-text>
+        </v-card>
+      </v-col>
 
-    <span>
-      <strong>Prioridade: </strong>
-      <p>{{ getCurrentTicket.priority }}</p>
-    </span>
+      <v-col cols="4" md="4">
+        <v-card>
+          <v-card-title>Propriedades</v-card-title>
 
-    <span>
-      <strong>Status: </strong>
-      <p>{{ getCurrentTicket.status }}</p>
-    </span>
-
-    <span>
-      <strong>Criado em: </strong>
-      <p>{{ getCurrentTicket.createdAt }}</p>
-    </span>
-
-    <span>
-      <strong>Criado por: </strong>
-      <p>{{ getCurrentTicket.authorEmail }}</p>
-    </span>
-  </section>
-
-  <div>
-    <button @click="$router.push({ name: 'edit-ticket', params: { id: getCurrentTicket.id } })">
-      Editar
-    </button>
-  </div>
+          <v-card-text>
+            <v-list density="compact">
+              <v-list-item title="Prioridade" :subtitle="getCurrentTicket.priority" />
+              <v-list-item title="Status" :subtitle="getCurrentTicket.status" />
+              <v-list-item title="Criado em" :subtitle="formatDate(getCurrentTicket.createdAt)" />
+              <v-list-item title="Criado por" :subtitle="getCurrentTicket.authorEmail" />
+            </v-list>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { formatDate } from '@/utils/utils'
 
 export default {
   async created() {
@@ -80,6 +57,12 @@ export default {
   },
 
   methods: {
+    formatDate: formatDate,
+
+    defineRoute(routeName, routeId) {
+      this.$router.push({ name: routeName, params: { id: routeId } })
+    },
+
     // Se a lista de tickets não estiver carregada (deep link / refresh), busco só o
     // ticket necessário. Mantenho o template simples usando apenas getCurrentTicket.
     async fetchTicket(ticketId) {

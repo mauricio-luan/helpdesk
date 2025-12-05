@@ -30,7 +30,6 @@
               <v-avatar color="primary" variant="tonal" class="mb-2">
                 {{ getUserEmail.charAt(0).toUpperCase() }}</v-avatar
               >
-              <!-- <h3>Maurício</h3> -->
               <p class="text-caption mt-1">{{ getUserEmail }}</p>
 
               <v-divider class="my-3"></v-divider>

@@ -13,7 +13,7 @@
         </v-col>
 
         <v-col cols="2">
-          {{ ticket.createdAt }}
+          {{ formatDate(ticket.createdAt) }}
         </v-col>
 
         <v-col cols="2">
@@ -25,9 +25,15 @@
 </template>
 
 <script>
+import { formatDate } from '@/utils/utils'
+
 export default {
   props: {
     ticket: { type: Object, required: true },
+  },
+
+  methods: {
+    formatDate: formatDate,
   },
 }
 </script>

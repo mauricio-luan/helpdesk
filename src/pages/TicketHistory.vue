@@ -12,7 +12,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   created() {
-    this.ticketId = this.$route.params.ticketId
+    this.ticketId = this.$route.params.id
     this.history(this.getUserIdToken, this.ticketId)
   },
 

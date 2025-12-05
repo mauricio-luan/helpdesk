@@ -38,7 +38,7 @@ const router = createRouter({
           component: () => import('@/pages/TicketEdit.vue'),
         },
         {
-          path: 'history/:ticketId',
+          path: 'history/:id',
           name: 'ticket-history',
           component: () => import('@/pages/TicketHistory.vue'),
         },
