@@ -3,7 +3,7 @@
     <!-- headers -->
     <v-row class="d-flex align-center">
       <v-col cols="8">
-        <v-card-title>{{ getCurrentTicket.title }}</v-card-title>
+        <v-card-title># {{ getCurrentTicket.id }} - {{ getCurrentTicket.title }}</v-card-title>
       </v-col>
 
       <v-col cols="4">
@@ -21,18 +21,59 @@
     <!-- contents -->
     <v-row>
       <v-col cols="8" md="8">
-        <v-card v-if="editing" class="h-auto my-5">
-          <v-textarea label="Comentario" variant="solo-filled" v-model="content" />
-          <v-card-actions class="justify-end mr-3">
-            <v-btn size="x-small" @click="createComment()">Salvar</v-btn>
-            <v-btn size="x-small" @click="editing = !editing">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
+        <v-card class="pa-3">
+          <v-row class="d-flex justify-space-between my-2">
+            <v-card-title>Descrição</v-card-title>
 
-        <v-card class="h-auto" :text="getCurrentTicket.content">
-          <v-card-actions class="justify-end mr-3">
-            <v-btn size="x-small" @click="editing = true">Responder</v-btn>
-          </v-card-actions>
+            <v-card-actions class="justify-end mr-5">
+              <v-btn size="x-small" color="primary" variant="flat" @click="editing = true">
+                Responder
+              </v-btn>
+            </v-card-actions>
+          </v-row>
+
+          <!-- new comment -->
+          <v-card-text class="py-0">
+            <div class="d-flex justify-end">
+              <v-card v-if="editing" variant="plain" width="95%" class="mr-5">
+                <v-textarea label="Comentario" variant="solo-filled" v-model="content" />
+
+                <v-card-actions class="justify-end mr-3">
+                  <v-btn size="x-small" color="error" variant="tonal" @click="editing = !editing">
+                    Cancelar
+                  </v-btn>
+                  <v-btn
+                    size="x-small"
+                    color="success"
+                    variant="flat"
+                    @click="createComment()"
+                    :loading="btnLoading"
+                  >
+                    Salvar
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </div>
+          </v-card-text>
+
+          <!-- comments -->
+          <v-timeline align="start" side="end" density="compact">
+            <v-timeline-item
+              v-for="item in ticketContent"
+              :key="item.id"
+              :dot-color="item.id === 'root-content' ? 'warning' : 'primary'"
+              :icon="item.id === 'root-content' ? 'mdi-alert-circle' : 'mdi-account'"
+              width="95%"
+            >
+              <v-card elevation-1>
+                <v-card-subtitle class="pt-2 d-flex justify-space-between">
+                  <span>{{ item.createdBy }}</span>
+                  <span>{{ formatDate(item.createdAt) }}</span>
+                </v-card-subtitle>
+                <v-card-text>{{ item.content }}</v-card-text>
+              </v-card>
+            </v-timeline-item>
+          </v-timeline>
         </v-card>
       </v-col>
 
@@ -59,26 +100,28 @@ import { formatDate } from '@/utils/utils'
 
 export default {
   async created() {
-    await this.fetchTicket(this.$route.params.id)
-    console.log(this.getTicketDetails)
+    const routeId = this.$route.params.id
+    const memoryId = this.getCurrentTicket?.id
+
+    if (!memoryId || memoryId !== routeId) {
+      this.$store.commit('comments/resetComments')
+      await this.fetchTicket(routeId)
+    } else {
+      console.log('debug: nao preciou refazer a requisicao')
+    }
   },
 
   data() {
     return {
       editing: false,
       content: '',
+      btnLoading: false,
     }
   },
 
   computed: {
-    ...mapGetters('tickets', [
-      'hasTickets',
-      'getTicketById',
-      'getCurrentTicket',
-      'getTicketDetails',
-    ]),
+    ...mapGetters('tickets', ['getCurrentTicket', 'ticketContent']),
     ...mapGetters('auth', ['getUserEmail', 'getUserIdToken']),
-    ...mapGetters('comments', ['getAllComments']),
   },
 
   methods: {
@@ -98,6 +141,7 @@ export default {
 
     async createComment() {
       try {
+        this.btnLoading = true
         const comment = {
           content: this.content,
           createdAt: new Date().toISOString(),
@@ -105,8 +149,14 @@ export default {
         }
 
         await commentsService.createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
+        await this.$store.dispatch('tickets/initializeTicketDetails', this.getCurrentTicket.id)
+
+        this.editing = false
+        this.content = ''
       } catch (error) {
         console.error(error)
+      } finally {
+        this.btnLoading = false
       }
     },
   },

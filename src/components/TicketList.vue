@@ -8,7 +8,7 @@
       <v-col cols="2">Status</v-col>
     </v-row>
 
-    <v-data-iterator :items="tickets" :page="1" :items-per-page="5">
+    <v-data-iterator :items="getAllTickets" :page="1" :items-per-page="5">
       <template v-slot:default="{ items }">
         <v-row>
           <v-col v-for="(item, i) in items" :key="i" cols="12" md="12">
@@ -67,10 +67,6 @@ export default {
   computed: {
     ...mapGetters('auth', ['getUserIdToken']),
     ...mapGetters('tickets', ['hasTickets', 'getAllTickets']),
-
-    tickets() {
-      return this.getAllTickets
-    },
   },
 
   methods: {

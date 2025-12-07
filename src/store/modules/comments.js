@@ -11,6 +11,10 @@ export default {
     setComments(state, payload) {
       state.comments = payload
     },
+
+    resetComments(state) {
+      state.comments = []
+    },
   },
 
   actions: {

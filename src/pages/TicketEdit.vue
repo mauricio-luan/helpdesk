@@ -13,7 +13,7 @@
             variant="outlined"
             v-model="form.priority"
             :items="priorities"
-          ></v-select>
+          />
         </v-col>
       </v-row>
 
@@ -30,7 +30,13 @@
 
       <v-row>
         <v-col cols="12" class="d-flex justify-end">
-          <v-btn color="primary" prepend-icon="mdi-content-save" text="Salvar alterações" />
+          <v-btn
+            color="primary"
+            prepend-icon="mdi-content-save"
+            text="Salvar alterações"
+            type="submit"
+          />
+          <!-- colocar botão de finalizar ticket aqui -->
           <v-btn color="error" prepend-icon="mdi-close-circle" text="Finalizar" class="ml-4" />
         </v-col>
       </v-row>
@@ -88,7 +94,7 @@ export default {
         await this.$store.dispatch('tickets/updateTicket', { ...this.form })
         this.$router.replace({ name: 'ticket-detail', params: { id: this.$route.params.id } })
       } catch (error) {
-        console.log(handleError(error))
+        console.error(handleError(error))
         throw error
       }
     },

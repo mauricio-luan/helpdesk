@@ -100,11 +100,8 @@ export const getTicketById = async (ticketId, userToken) => {
 
 export const getTicketLog = async (userToken, ticketId) => {
   try {
-    console.log(userToken, ticketId)
     const url = `${FIREBASE_URL}/ticket-history/${ticketId}.json?auth=${userToken}`
     const response = await axios.get(url)
-
-    console.log(response.data)
 
     return response.data
   } catch (error) {

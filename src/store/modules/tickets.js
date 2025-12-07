@@ -34,7 +34,6 @@ export default {
     async fetchTicket(context, ticketId) {
       try {
         const userToken = context.rootGetters['auth/getUserIdToken']
-
         const ticket = await ticketService.getTicketById(ticketId, userToken)
 
         context.commit('setCurrentTicket', ticket)
@@ -115,18 +114,24 @@ export default {
       return state.currentTicket
     },
 
-    getTicketDetails(state, getters, rootState, rootGetters) {
+    /*
+    Aqui nesse getter eu to pegando o content inicial do ticket e misturando
+    com os comments, em um array, pra poder usar no componente v-timeline
+    Ja retorno ordenado por data de criação
+    */
+    ticketContent(state, getters, rootState, rootGetters) {
       const ticket = getters.getCurrentTicket
       const comments = rootGetters['comments/getAllComments']
 
       const ticketAsComment = {
-        id: 'root-ticket',
+        id: 'root-content',
         content: ticket.content,
         createdAt: ticket.createdAt,
         createdBy: ticket.authorEmail,
       }
 
-      return [ticketAsComment, ...comments]
+      const timeline = [ticketAsComment, ...comments]
+      return timeline.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     },
   },
 }

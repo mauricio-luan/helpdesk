@@ -23,7 +23,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
+context_gemini.md
 *.tsbuildinfo
 
 .eslintcache
