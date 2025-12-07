@@ -44,6 +44,19 @@ export default {
       }
     },
 
+    async initializeTicketDetails(context, ticketId) {
+      try {
+        const tarefas = [
+          context.dispatch('fetchTicket', ticketId),
+          context.dispatch('comments/fetchComments', ticketId, { root: true }),
+        ]
+
+        await Promise.all(tarefas)
+      } catch (error) {
+        console.error('Falha ao carregar a tela:', error)
+      }
+    },
+
     async updateTicket(context, ticket) {
       try {
         const currentTicket = context.getters.getCurrentTicket
@@ -100,6 +113,20 @@ export default {
 
     getCurrentTicket(state) {
       return state.currentTicket
+    },
+
+    getTicketDetails(state, getters, rootState, rootGetters) {
+      const ticket = getters.getCurrentTicket
+      const comments = rootGetters['comments/getAllComments']
+
+      const ticketAsComment = {
+        id: 'root-ticket',
+        content: ticket.content,
+        createdAt: ticket.createdAt,
+        createdBy: ticket.authorEmail,
+      }
+
+      return [ticketAsComment, ...comments]
     },
   },
 }

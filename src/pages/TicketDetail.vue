@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <!-- headers -->
     <v-row class="d-flex align-center">
       <v-col cols="8">
         <v-card-title>{{ getCurrentTicket.title }}</v-card-title>
@@ -17,18 +18,26 @@
       </v-col>
     </v-row>
 
+    <!-- contents -->
     <v-row>
       <v-col cols="8" md="8">
-        <v-card>
-          <v-card-title>Descrição</v-card-title>
-          <v-card-text>{{ getCurrentTicket.content }}</v-card-text>
+        <v-card v-if="editing" class="h-auto my-5">
+          <v-textarea label="Comentario" variant="solo-filled" v-model="content" />
+          <v-card-actions class="justify-end mr-3">
+            <v-btn size="x-small" @click="createComment()">Salvar</v-btn>
+            <v-btn size="x-small" @click="editing = !editing">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+
+        <v-card class="h-auto" :text="getCurrentTicket.content">
+          <v-card-actions class="justify-end mr-3">
+            <v-btn size="x-small" @click="editing = true">Responder</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
 
       <v-col cols="4" md="4">
-        <v-card>
-          <v-card-title>Propriedades</v-card-title>
-
+        <v-card title="Propriedades">
           <v-card-text>
             <v-list density="compact">
               <v-list-item title="Prioridade" :subtitle="getCurrentTicket.priority" />
@@ -44,16 +53,32 @@
 </template>
 
 <script>
+import * as commentsService from '@/api/commentsService'
 import { mapGetters } from 'vuex'
 import { formatDate } from '@/utils/utils'
 
 export default {
   async created() {
     await this.fetchTicket(this.$route.params.id)
+    console.log(this.getTicketDetails)
+  },
+
+  data() {
+    return {
+      editing: false,
+      content: '',
+    }
   },
 
   computed: {
-    ...mapGetters('tickets', ['hasTickets', 'getTicketById', 'getCurrentTicket']),
+    ...mapGetters('tickets', [
+      'hasTickets',
+      'getTicketById',
+      'getCurrentTicket',
+      'getTicketDetails',
+    ]),
+    ...mapGetters('auth', ['getUserEmail', 'getUserIdToken']),
+    ...mapGetters('comments', ['getAllComments']),
   },
 
   methods: {
@@ -63,18 +88,23 @@ export default {
       this.$router.push({ name: routeName, params: { id: routeId } })
     },
 
-    // Se a lista de tickets não estiver carregada (deep link / refresh), busco só o
-    // ticket necessário. Mantenho o template simples usando apenas getCurrentTicket.
     async fetchTicket(ticketId) {
       try {
-        console.log('executando fetchTicket')
-        if (!this.hasTickets) {
-          await this.$store.dispatch('tickets/fetchTicket', ticketId)
-          console.log('nao tinha tickets no state')
-        } else {
-          this.$store.commit('tickets/setCurrentTicket', this.getTicketById(ticketId))
-          console.log('tinha tickets no state, comitando')
+        await this.$store.dispatch('tickets/initializeTicketDetails', ticketId)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async createComment() {
+      try {
+        const comment = {
+          content: this.content,
+          createdAt: new Date().toISOString(),
+          createdBy: this.getUserEmail,
         }
+
+        await commentsService.createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
       } catch (error) {
         console.error(error)
       }

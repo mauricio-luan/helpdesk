@@ -59,7 +59,6 @@ export default {
   },
 
   created() {
-    console.log(this.tickets)
     if (!this.hasTickets) {
       this.getTickets()
     }
