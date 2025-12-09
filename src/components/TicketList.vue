@@ -59,14 +59,14 @@ export default {
   },
 
   created() {
-    if (!this.hasTickets) {
+    if (!this.hasTickets || this.isNecessaryUpdateTickets) {
       this.getTickets()
     }
   },
 
   computed: {
     ...mapGetters('auth', ['getUserIdToken']),
-    ...mapGetters('tickets', ['hasTickets', 'getAllTickets']),
+    ...mapGetters('tickets', ['hasTickets', 'getAllTickets', 'isNecessaryUpdateTickets']),
   },
 
   methods: {

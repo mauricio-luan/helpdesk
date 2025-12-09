@@ -66,6 +66,7 @@ export default {
         }
 
         await ticketService.createTicket(this.getUserIdToken, ticketPayload)
+        this.$store.commit('tickets/setUpdateTickets', true)
 
         alert('chamado criado!')
       } catch (error) {

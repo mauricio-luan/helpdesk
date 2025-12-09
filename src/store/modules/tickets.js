@@ -6,6 +6,7 @@ export default {
   state: {
     tickets: [],
     currentTicket: {},
+    isNecessaryUpdateTickets: false,
   },
 
   mutations: {
@@ -16,6 +17,10 @@ export default {
     setCurrentTicket(state, payload) {
       state.currentTicket = payload
     },
+
+    setUpdateTickets(state, payload) {
+      state.isNecessaryUpdateTickets = payload
+    },
   },
 
   actions: {
@@ -25,6 +30,7 @@ export default {
         const tickets = await ticketService.getTickets(userToken)
 
         context.commit('setTickets', tickets)
+        context.commit('tickets/setUpdateTickets', false)
       } catch (error) {
         console.error('fetchTickets: ', error)
         throw error
@@ -112,6 +118,10 @@ export default {
 
     getCurrentTicket(state) {
       return state.currentTicket
+    },
+
+    isNecessaryUpdateTickets(state) {
+      return state.isNecessaryUpdateTickets
     },
 
     /*
