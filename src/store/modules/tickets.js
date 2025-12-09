@@ -30,7 +30,7 @@ export default {
         const tickets = await ticketService.getTickets(userToken)
 
         context.commit('setTickets', tickets)
-        context.commit('tickets/setUpdateTickets', false)
+        context.commit('setUpdateTickets', false)
       } catch (error) {
         console.error('fetchTickets: ', error)
         throw error
