@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { generateNextProtocol } from '@/helpers/generateProtocol'
 
 const FIREBASE_URL = import.meta.env.VITE_API_FIREBASE
 
@@ -6,10 +7,13 @@ export const createTicket = async (userToken, ticket) => {
   try {
     const url = `${FIREBASE_URL}/tickets.json?auth=${userToken}`
 
+    const protocol = await generateNextProtocol()
+
     const data = {
       ...ticket,
       status: 'open',
       createdAt: new Date().toISOString(),
+      protocol: protocol,
     }
 
     await axios.post(url, data)

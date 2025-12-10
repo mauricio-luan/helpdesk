@@ -62,6 +62,7 @@ export default {
     if (!this.hasTickets || this.isNecessaryUpdateTickets) {
       this.getTickets()
     }
+    console.log(this.getAllTickets) //apagar depois <--------------------
   },
 
   computed: {

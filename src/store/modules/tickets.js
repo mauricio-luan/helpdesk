@@ -109,7 +109,7 @@ export default {
     },
 
     getAllTickets(state) {
-      return state.tickets
+      return state.tickets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     },
 
     getTicketById(state) {
