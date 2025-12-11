@@ -19,6 +19,8 @@ export const getComments = async (userToken, ticketId) => {
     const url = `${FIREBASE_URL}/ticket-comments/${ticketId}.json?auth=${userToken}`
     const response = await axios.get(url)
 
+    if (response.data === null) return []
+
     const responseArray = Object.entries(response.data)
     const comments = responseArray.map((comment) => ({
       id: comment[0],

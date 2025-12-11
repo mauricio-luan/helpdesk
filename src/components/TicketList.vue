@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="px-4 py-2 font-weight-bold text-medium-emphasis">
-      <v-col cols="3">ID</v-col>
+      <v-col cols="3">Protocolo</v-col>
       <v-col cols="3">Título</v-col>
       <v-col cols="2">Prioridade</v-col>
       <v-col cols="2">Data</v-col>

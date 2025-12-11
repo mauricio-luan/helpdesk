@@ -59,6 +59,7 @@ export default {
         await Promise.all(tarefas)
       } catch (error) {
         console.error('Falha ao carregar a tela:', error)
+        throw error
       }
     },
 

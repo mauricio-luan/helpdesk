@@ -2,7 +2,7 @@
   <v-card hover :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
     <v-card-text>
       <v-row class="align-center">
-        <v-col cols="3"> #{{ ticket.id }}</v-col>
+        <v-col cols="3"> # {{ ticket.protocol ? ticket.protocol : 'Sem protocolo' }}</v-col>
 
         <v-col cols="3">
           {{ ticket.title }}

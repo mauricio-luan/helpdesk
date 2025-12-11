@@ -3,7 +3,10 @@
     <!-- headers -->
     <v-row class="d-flex align-center">
       <v-col cols="8">
-        <v-card-title># {{ getCurrentTicket.id }} - {{ getCurrentTicket.title }}</v-card-title>
+        <v-card-title>
+          # {{ getCurrentTicket.protocol ? getCurrentTicket.protocol : 'Sem protocolo' }} -
+          {{ getCurrentTicket.title }}
+        </v-card-title>
       </v-col>
 
       <v-col cols="4">
@@ -105,10 +108,11 @@ export default {
 
     if (!memoryId || memoryId !== routeId) {
       this.$store.commit('comments/resetComments')
-      await this.fetchTicket(routeId)
+      // await this.fetchTicket(routeId)
     } else {
-      console.log('debug: nao preciou refazer a requisicao')
+      console.log('debug: cache comments')
     }
+    await this.fetchTicket(routeId)
   },
 
   data() {
