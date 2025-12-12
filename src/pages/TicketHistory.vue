@@ -1,29 +1,24 @@
 <template>
   <h2>Historico de alteraçoes do chamado</h2>
 
-  <v-container>
-    <v-row v-if="log">
-      <v-col cols="12">
-        <v-row v-for="register in log" :key="register.date">
-          <v-col cols="3">
-            {{ formatDate(register.date) }}
-            <br />
-            {{ register.editedBy }}
-          </v-col>
+  <v-container v-if="log">
+    <v-row v-for="register in log" :key="register.date" style="background-color: aqua">
+      <v-col cols="3" style="background-color: antiquewhite"
+        >{{ formatDate(register.date) }}<br />{{ register.editedBy }}</v-col
+      >
 
-          <v-col cols="9">
-            <v-row v-for="log in register.log" :key="log.field">
-              <!-- {{ log.field }} -->
-              <v-col cols="6">De: {{ log.from }}</v-col>
-              <v-col cols="6">Para: {{ log.to }}</v-col>
-            </v-row>
-          </v-col>
+      <v-col cols="9" style="background-color: blueviolet">
+        <v-row v-for="log in register.log" :key="log.field" style="background-color: yellow">
+          <!-- ajustar grid -->
+          <div style="background-color: cadetblue">{{ log.field }}</div>
+          <v-col cols="6" style="background-color: violet">De: {{ log.from }}</v-col>
+          <v-col cols="6" style="background-color: blue">Para: {{ log.to }}</v-col>
         </v-row>
       </v-col>
     </v-row>
-
-    <p v-else>Não há alterações</p>
   </v-container>
+
+  <p v-else>Não há alterações</p>
 </template>
 
 <script>
