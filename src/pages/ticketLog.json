@@ -1,0 +1,47 @@
+{
+  "-OgDGbie0_XKPPAb-zAp": {
+    "date": "2025-12-11T16:37:36.833Z",
+    "editedBy": "mauricioluan2023@gmail.com",
+    "log": [
+      {
+        "field": "content",
+        "from": "vou usar esse pra montar a tela de log. to pensando em montar uma linha do tempo assim como a de comentarios de log, vou ver ainda.... esse eu vou editar varias vezes pra ter conteudo no log.",
+        "to": "vou usar esse pra montar a tela de log. to pensando em montar uma linha do tempo assim como a de comentarios de log, vou ver ainda.... esse eu vou editar varias vezes pra ter conteudo no log.\n-----------\n1° mudança"
+      },
+      {
+        "field": "priority",
+        "from": "Alta",
+        "to": "Baixa"
+      },
+      {
+        "field": "title",
+        "from": "novo ticket de teste",
+        "to": "mudando o tiltulo do ticket"
+      }
+    ],
+    "ticketId": "-OgDGRvGkzV9q1NTMcRU"
+  },
+
+  "-OgDInB6kEiobFiui0xG": {
+    "date": "2025-12-11T16:47:08.078Z",
+    "editedBy": "mauricioluan2023@gmail.com",
+    "log": [
+      {
+        "field": "content",
+        "from": "vou usar esse pra montar a tela de log. to pensando em montar uma linha do tempo assim como a de comentarios de log, vou ver ainda.... esse eu vou editar varias vezes pra ter conteudo no log.\n-----------\n1° mudança",
+        "to": "vou usar esse pra montar a tela de log. to pensando em montar uma linha do tempo assim como a de comentarios de log, vou ver ainda.... esse eu vou editar varias vezes pra ter conteudo no log.\n-----------\n1° mudança\n----------- \\n\n2° mudanaça"
+      },
+      {
+        "field": "priority",
+        "from": "Baixa",
+        "to": "Media"
+      },
+      {
+        "field": "title",
+        "from": "mudando o tiltulo do ticket",
+        "to": "mudando o tiltulo do ticket de novo"
+      }
+    ],
+    "ticketId": "-OgDGRvGkzV9q1NTMcRU"
+  }
+}
