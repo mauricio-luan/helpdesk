@@ -12,13 +12,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   created() {
-    this.ticketId = this.$route.params.id
-    this.history(this.getUserIdToken, this.ticketId)
+    this.loadHistory()
   },
 
   data() {
     return {
-      ticketId: '',
       log: null,
       errorMessage: '',
     }
@@ -26,11 +24,15 @@ export default {
 
   computed: {
     ...mapGetters('auth', ['getUserIdToken']),
+
+    ticketId() {
+      return this.$route.params.id
+    },
   },
 
   methods: {
-    async history(userIdToken, ticketId) {
-      this.log = await getTicketLog(userIdToken, ticketId)
+    async loadHistory() {
+      this.log = await getTicketLog(this.getUserIdToken, this.ticketId)
       if (!this.log || this.log === null) {
         this.errorMessage = 'Não há alterações'
       }
@@ -38,4 +40,3 @@ export default {
   },
 }
 </script>
-<style lang=""></style>
