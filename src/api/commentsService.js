@@ -1,36 +1,16 @@
 import axios from 'axios'
-
-const FIREBASE_URL = import.meta.env.VITE_API_FIREBASE
+import { db } from '@/plugins/firebase'
 
 export const createComments = async (userToken, payload, ticketId) => {
-  try {
-    const url = `${FIREBASE_URL}/ticket-comments/${ticketId}.json?auth=${userToken}`
-    /*const response =  */ await axios.post(url, payload)
-
-    // console.log(response.data)
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  const url = `${db.app.options.databaseURL}/ticket-comments/${ticketId}.json?auth=${userToken}`
+  await axios.post(url, payload)
 }
 
 export const getComments = async (userToken, ticketId) => {
-  try {
-    const url = `${FIREBASE_URL}/ticket-comments/${ticketId}.json?auth=${userToken}`
-    const response = await axios.get(url)
+  const url = `${db.app.options.databaseURL}/ticket-comments/${ticketId}.json?auth=${userToken}`
+  const response = await axios.get(url)
 
-    if (response.data === null) return []
+  if (response.data === null) return []
 
-    const responseArray = Object.entries(response.data)
-    const comments = responseArray.map((comment) => ({
-      id: comment[0],
-      ...comment[1],
-    }))
-    // console.log(comments)
-
-    return comments
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  return Object.entries(response.data).map(([id, data]) => ({ id, ...data }))
 }

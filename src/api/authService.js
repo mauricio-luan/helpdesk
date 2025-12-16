@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import { db } from '@/plugins/firebase'
 
 const API_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 const API_KEY = import.meta.env.VITE_AUTH_API_KEY
@@ -10,7 +11,6 @@ const SIGNIN_URL = `${API_BASE_URL}:signInWithPassword?key=${API_KEY}`
 export const createAccount = async (payload) => {
   try {
     const userData = await signup(payload)
-
     await saveUser(userData)
 
     return userData
