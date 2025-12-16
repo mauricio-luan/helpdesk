@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import handleError from '@/utils/errors/errors'
-
 export default {
   data() {
     return {
@@ -76,7 +74,7 @@ export default {
 
         this.$router.replace({ name: 'dashboard' })
       } catch (error) {
-        this.errorMessage = handleError(error.message)
+        this.errorMessage = error.message
       } finally {
         this.loading = false
       }

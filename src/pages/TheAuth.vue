@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import handleError from '@/utils/errors/errors'
 import { createAccount } from '@/api/authService'
 
 export default {
@@ -45,7 +44,7 @@ export default {
 
         this.$router.replace({ name: 'login' })
       } catch (error) {
-        this.errorMessage = handleError(error.message)
+        this.errorMessage = error.message
         console.error(this.errorMessage)
       } finally {
         this.isLoading = false

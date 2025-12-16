@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { db } from '@/plugins/firebase'
 import { generateNextProtocol } from '@/helpers/generateProtocol'
-import { handleApiError } from '@/utils/utils'
+import { handleApiError } from '@/utils/errors'
 
 export const createTicket = async (userToken, ticket) => {
   try {

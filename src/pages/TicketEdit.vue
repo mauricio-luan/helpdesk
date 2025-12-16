@@ -47,7 +47,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { ticketConstants } from '@/constants/constants'
-import handleError from '@/utils/errors/errors'
 
 export default {
   data() {
@@ -83,7 +82,7 @@ export default {
 
         this.form = { ...ticketData }
       } catch (error) {
-        this.errorMessage = handleError(error)
+        this.errorMessage = error
       } finally {
         this.loading = false
       }
@@ -94,7 +93,7 @@ export default {
         await this.$store.dispatch('tickets/updateTicket', { ...this.form })
         this.$router.replace({ name: 'ticket-detail', params: { id: this.$route.params.id } })
       } catch (error) {
-        console.error(handleError(error))
+        console.error(error)
         throw error
       }
     },
