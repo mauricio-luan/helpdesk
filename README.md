@@ -1,44 +1,51 @@
-# helpdesk
+# Helpdesk
 
-This template should help get you started developing with Vue 3 in Vite.
+## Sobre o projeto
 
-## Recommended IDE Setup
+Este repositório é um **projeto de estudo** desenvolvido para praticar e consolidar conceitos de desenvolvimento front-end moderno com Vue. A proposta não é entregar um sistema pronto para produção, mas sim usar um domínio realista (helpdesk / tickets) como base para aprendizado.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+O foco está menos no resultado final e mais nas decisões técnicas, organização do código e experimentação de soluções comuns em aplicações reais.
 
-## Recommended Browser Setup
+## Objetivo
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Usar um sistema de helpdesk como laboratório para:
 
-## Customize configuration
+- aprender Vue 3 na prática
+- estruturar uma SPA de forma organizada
+- trabalhar com estado global e rotas
+- integrar front-end com um backend simples
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Principais conceitos praticados
 
-## Project Setup
+- Componentização
+- Vue Router (navegação e rotas)
+- Vuex (estado global)
+- Autenticação de usuários
+- Persistência de dados
+- Organização de pastas e responsabilidades
 
-```sh
-npm install
-```
+## Tecnologias
 
-### Compile and Hot-Reload for Development
+- Vue 3
+- Vite
+- Vue Router
+- Vuex
+- Firebase (Auth e Realtime Database)
+- JavaScript, HTML e CSS
 
-```sh
-npm run dev
-```
+## Funcionalidades
 
-### Compile and Minify for Production
+As funcionalidades existem como suporte ao estudo dos conceitos:
 
-```sh
-npm run build
-```
+- login e autenticação
+- criação e listagem de tickets
+- controle básico de status
+- persistência no Firebase
 
-### Lint with [ESLint](https://eslint.org/)
+## Observações
 
-```sh
-npm run lint
-```
+Este projeto contém código experimental, refatorações em andamento e decisões tomadas com foco em aprendizado.
+
+Ele funciona como um **registro de evolução técnica** e referência para projetos futuros.
+
+Mauricio
