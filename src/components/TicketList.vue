@@ -1,5 +1,7 @@
 <template>
-  <v-container>
+  <SnackBar v-if="errorMessage" v-model:snackbar="showSnackbar" :text="errorMessage" />
+
+  <v-container v-else>
     <v-row class="px-4 py-2 font-weight-bold text-medium-emphasis">
       <v-col cols="3">Protocolo</v-col>
       <v-col cols="3">Título</v-col>
@@ -26,7 +28,7 @@
             variant="tonal"
             rounded
             @click="prevPage"
-          ></v-btn>
+          />
 
           <div class="mx-2 text-caption">Página {{ page }} de {{ pageCount }}</div>
 
@@ -37,7 +39,7 @@
             variant="tonal"
             rounded
             @click="nextPage"
-          ></v-btn>
+          />
         </div>
       </template>
     </v-data-iterator>
@@ -55,6 +57,7 @@ export default {
     return {
       loading: false,
       errorMessage: null,
+      showSnackbar: false,
     }
   },
 
@@ -62,7 +65,6 @@ export default {
     if (!this.hasTickets || this.isNecessaryUpdateTickets) {
       this.getTickets()
     }
-    console.log(this.getAllTickets) //apagar depois <--------------------
   },
 
   computed: {
@@ -79,7 +81,7 @@ export default {
         await this.$store.dispatch('tickets/fetchTickets')
       } catch (error) {
         this.errorMessage = error
-        console.error(error)
+        this.showSnackbar = true
       } finally {
         this.loading = false
       }

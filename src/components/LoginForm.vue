@@ -2,7 +2,7 @@
   <SnackBar v-if="errorMessage" v-model:snackbar="showSnackbar" :text="errorMessage" />
 
   <v-card class="mx-auto px-6 py-8" width="400">
-    <v-form v-model="form" @submit.prevent="login">
+    <v-form v-model="form" @submit.prevent="submitForm">
       <v-text-field
         type="Email"
         v-model.trim="email"
@@ -10,6 +10,7 @@
         :rules="[required]"
         class="mb-2"
         label="Email"
+        placeholder="Insira o email"
         clearable
       />
 
@@ -19,7 +20,7 @@
         :readonly="loading"
         :rules="[required]"
         label="Senha"
-        placeholder="Enter your password"
+        placeholder="Insira a senha"
         clearable
       />
 
@@ -61,7 +62,7 @@ export default {
       return !!v || 'Preenchimento do campo é obrigatório.'
     },
 
-    async login() {
+    async submitForm() {
       try {
         this.errorMessage = null
         this.loading = true
