@@ -55,10 +55,7 @@ export const getTicketById = async (ticketId, userToken) => {
       `${db.app.options.databaseURL}/tickets/${ticketId}.json?auth=${userToken}`,
     )
 
-    return {
-      id: ticketId,
-      ...response.data,
-    }
+    return { id: ticketId, ...response.data }
   } catch (error) {
     handleApiError(error)
   }

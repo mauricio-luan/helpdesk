@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat border="b" density="compact" color="surface">
+  <v-app-bar v-if="isLogged" flat border="b" density="compact" color="surface">
     <template v-slot:prepend>
       <v-app-bar-nav-icon @click="$emit('toggle-drawer')" />
 
@@ -40,7 +40,7 @@
 
               <v-divider class="my-3"></v-divider>
 
-              <v-btn variant="text" rounded block color="error" @click="logoff">Sair</v-btn>
+              <v-btn variant="text" rounded block color="error" @click="logoff"> Sair </v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -53,10 +53,10 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  emits: ['toggle-drawer'],
+  emits: ['toggle-drawer', 'tryLogoff'],
 
   computed: {
-    ...mapGetters('auth', ['getUserEmail']),
+    ...mapGetters('auth', ['isLogged', 'getUserEmail']),
   },
 
   methods: {

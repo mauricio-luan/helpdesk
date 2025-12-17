@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
   const isLogged = store.getters['auth/isLogged']
   // const logged = localStorage.getItem('isLogged')
 
-  if (to.name === 'login' && isLogged) {
+  if (to.name === 'auth' && isLogged) {
     next({ name: 'dashboard' })
   } else if (to.meta.requiresAuth && !isLogged) {
     next({ name: 'login' })

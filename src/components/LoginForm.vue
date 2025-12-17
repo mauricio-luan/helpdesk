@@ -1,5 +1,7 @@
 <template>
-  <v-card class="mx-auto px-6 py-8" max-width="344">
+  <SnackBar v-if="errorMessage" v-model:snackbar="showSnackbar" :text="errorMessage" />
+
+  <v-card class="mx-auto px-6 py-8" width="400">
     <v-form v-model="form" @submit.prevent="login">
       <v-text-field
         type="Email"
@@ -9,17 +11,17 @@
         class="mb-2"
         label="Email"
         clearable
-      ></v-text-field>
+      />
 
       <v-text-field
         type="password"
         v-model.trim="password"
         :readonly="loading"
         :rules="[required]"
-        label="Password"
+        label="Senha"
         placeholder="Enter your password"
         clearable
-      ></v-text-field>
+      />
 
       <br />
 
@@ -32,16 +34,11 @@
         variant="elevated"
         block
       >
-        Sign In
+        Entrar
       </v-btn>
 
-      <!-- No futuro inserir um alert -->
       <br />
-      <router-link :to="{ name: 'register' }">Sign up</router-link>
-
-      <p v-if="errorMessage">
-        {{ errorMessage }}
-      </p>
+      <router-link :to="{ name: 'register' }">Cadastrar</router-link>
     </v-form>
   </v-card>
 </template>
@@ -55,11 +52,13 @@ export default {
       errorMessage: null,
       form: false,
       loading: false,
+      showSnackbar: false,
     }
   },
+
   methods: {
     required(v) {
-      return !!v || 'Field is required.'
+      return !!v || 'Preenchimento do campo é obrigatório.'
     },
 
     async login() {
@@ -75,6 +74,7 @@ export default {
         this.$router.replace({ name: 'dashboard' })
       } catch (error) {
         this.errorMessage = error.message
+        this.showSnackbar = true
       } finally {
         this.loading = false
       }
