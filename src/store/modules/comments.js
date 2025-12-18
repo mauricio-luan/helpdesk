@@ -25,7 +25,7 @@ export default {
 
         context.commit('setComments', comments)
       } catch (error) {
-        console.error(error)
+        console.error('fetchComments: ', error)
         throw error
       }
     },

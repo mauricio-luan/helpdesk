@@ -120,6 +120,8 @@ export default {
       editing: false,
       content: '',
       btnLoading: false,
+      errorMessage: null,
+      loading: false,
     }
   },
 
@@ -137,15 +139,22 @@ export default {
 
     async fetchTicket(ticketId) {
       try {
+        this.loading = true
+        this.errorMessage = null
+
         await this.$store.dispatch('tickets/initializeTicketDetails', ticketId)
       } catch (error) {
-        console.error(error)
+        this.errorMessage = error.message
+      } finally {
+        this.loading = false
       }
     },
 
     async createComment() {
       try {
         this.btnLoading = true
+        this.errorMessage = null
+
         const comment = {
           content: this.content,
           createdAt: new Date().toISOString(),
@@ -154,13 +163,12 @@ export default {
 
         await commentsService.createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
         await this.$store.dispatch('tickets/initializeTicketDetails', this.getCurrentTicket.id)
-
-        this.editing = false
-        this.content = ''
       } catch (error) {
-        console.error(error)
+        this.errorMessage = error.message
       } finally {
         this.btnLoading = false
+        this.editing = false
+        this.content = ''
       }
     },
   },

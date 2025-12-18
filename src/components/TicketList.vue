@@ -10,10 +10,10 @@
       <v-col cols="2">Status</v-col>
     </v-row>
 
-    <v-data-iterator :items="getAllTickets" :page="1" :items-per-page="5">
+    <v-data-iterator :items="getAllTickets" :page="page" :items-per-page="10">
       <template v-slot:default="{ items }">
         <v-row>
-          <v-col v-for="(item, i) in items" :key="i" cols="12" md="12">
+          <v-col v-for="item in items" :key="item.raw.id" cols="12" md="12">
             <TicketCard :ticket="item.raw" />
           </v-col>
         </v-row>
@@ -55,6 +55,7 @@ export default {
 
   data() {
     return {
+      page: 1,
       loading: false,
       errorMessage: null,
       showSnackbar: false,
@@ -68,7 +69,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters('auth', ['getUserIdToken']),
     ...mapGetters('tickets', ['hasTickets', 'getAllTickets', 'isNecessaryUpdateTickets']),
   },
 
@@ -80,7 +80,7 @@ export default {
 
         await this.$store.dispatch('tickets/fetchTickets')
       } catch (error) {
-        this.errorMessage = error
+        this.errorMessage = error.message
         this.showSnackbar = true
       } finally {
         this.loading = false

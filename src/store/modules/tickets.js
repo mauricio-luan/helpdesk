@@ -44,7 +44,7 @@ export default {
 
         context.commit('setCurrentTicket', ticket)
       } catch (error) {
-        console.error(error)
+        console.error('fetchTicket: ', error)
         throw error
       }
     },
@@ -58,7 +58,7 @@ export default {
 
         await Promise.all(tarefas)
       } catch (error) {
-        console.error('Falha ao carregar a tela:', error)
+        console.error('initializeTicketDetails:', error)
         throw error
       }
     },
