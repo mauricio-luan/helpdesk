@@ -1,77 +1,59 @@
 <template>
-  <section>
-    <form @submit.prevent="submitForm()">
-      <div>
-        <label for="title">Titulo: </label>
-        <input type="text" name="title" id="title" v-model="title" />
-      </div>
-      <div>
-        <label for="content">Conteudo: </label><br />
-        <textarea name="content" id="content" v-model="content" rows="20" />
-      </div>
-      <div>
-        <label for="priority">Prioridade: </label>
-        <select name="priority" id="priority" v-model="priority">
-          <option :value="priorities.LOW">Baixa</option>
-          <option :value="priorities.MEDIUM">Media</option>
-          <option :value="priorities.HIGH">Alta</option>
-        </select>
-      </div>
+  <v-card class="pa-5 mx-5" width="70%" height="100%">
+    <v-card-title class="mb-5">Novo ticket</v-card-title>
 
-      <button>Criar</button>
-    </form>
-  </section>
+    <v-form @submit.prevent="submitForm()">
+      <v-text-field label="Titulo" v-model="title" required />
+      <v-textarea label="Conteudo" v-model="content" required rows="15" />
+      <v-select label="Prioridade" v-model="priority" :items="priorities" required />
+
+      <v-btn color="success">Criar</v-btn>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { ticketConstants } from '@/constants/constants'
-import * as ticketService from '@/api/ticketService'
+import { createTicket } from '@/api/ticketService'
 
 export default {
   name: 'TicketForm',
-
-  // props: {
-  //   mode: { type: String, required: true, default: 'create' },
-  // },
 
   data() {
     return {
       title: '',
       content: '',
-      priority: 'low',
-      // analysts: [],
-      priorities: null,
+      priority: null,
     }
-  },
-
-  created() {
-    this.priorities = ticketConstants
-    // this.analysts = this.getAnalysts()
   },
 
   computed: {
     ...mapGetters('auth', ['getUserId', 'getUserEmail', 'getUserIdToken']),
-  },
 
-  methods: {
-    async submitForm() {
-      try {
-        const ticketPayload = {
-          title: this.title,
-          content: this.content,
-          priority: this.priority,
-          authorId: this.getUserId,
-          authorEmail: this.getUserEmail,
+    priorities() {
+      return Object.values(ticketConstants)
+    },
+
+    methods: {
+      async submitForm() {
+        try {
+          const ticketPayload = {
+            title: this.title,
+            content: this.content,
+            priority: this.priority,
+            authorId: this.getUserId,
+            authorEmail: this.getUserEmail,
+          }
+
+          await createTicket(this.getUserIdToken, ticketPayload)
+          this.$store.commit('tickets/setUpdateTickets', true)
+
+          alert('chamado criado!')
+        } catch (error) {
+          console.error(error)
         }
-
-        await ticketService.createTicket(this.getUserIdToken, ticketPayload)
-        this.$store.commit('tickets/setUpdateTickets', true)
-
-        alert('chamado criado!')
-      } catch (error) {
-        console.error(error)
-      }
+      },
     },
   },
 }
