@@ -1,4 +1,6 @@
 <template>
+  <SnackBar v-if="message" v-model:snackbar="showSnackbar" :text="message" />
+
   <form @submit.prevent="submitForm">
     <div>
       <label for="email">email</label>
@@ -10,9 +12,6 @@
     </div>
     <button>Cadastrar</button>
   </form>
-
-  <p v-if="successMessage">{{ successMessage }}</p>
-  <p v-if="errorMessage">{{ errorMessage }}</p>
 </template>
 
 <script>
@@ -23,31 +22,26 @@ export default {
     return {
       email: '',
       password: '',
-      successMessage: null,
-      errorMessage: null,
+      message: null,
       isLoading: false,
+      showSnackbar: false,
     }
   },
 
   methods: {
     async submitForm() {
       try {
-        this.isLoading = true
+        await createAccount({ email: this.email, password: this.password })
 
-        await createAccount({
-          email: this.email,
-          password: this.password,
-        })
+        this.message = 'Conta criada!'
+        this.showSnackbar = true
 
-        this.successMessage = 'Conta criada com sucesso!'
-        console.log(this.successMessage)
-
-        this.$router.replace({ name: 'login' })
+        setTimeout(() => {
+          this.$router.replace({ name: 'login' })
+        }, 500)
       } catch (error) {
-        this.errorMessage = error.message
-        console.error(this.errorMessage)
-      } finally {
-        this.isLoading = false
+        this.message = error.message
+        this.showSnackbar = true
       }
     },
   },

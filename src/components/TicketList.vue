@@ -1,7 +1,7 @@
 <template>
   <SnackBar v-if="errorMessage" v-model:snackbar="showSnackbar" :text="errorMessage" />
 
-  <v-container v-else>
+  <v-container>
     <v-row class="px-4 py-2 font-weight-bold text-medium-emphasis">
       <v-col cols="3">Protocolo</v-col>
       <v-col cols="3">Título</v-col>

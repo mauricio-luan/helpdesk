@@ -1,4 +1,6 @@
 <template>
+  <SnackBar v-if="message" v-model:snackbar="showSnackbar" :text="message" />
+
   <v-container fluid>
     <!-- headers -->
     <v-row class="d-flex align-center">
@@ -17,6 +19,7 @@
           <v-btn color="primary" @click="defineRoute('ticket-history', getCurrentTicket.id)">
             Log
           </v-btn>
+          <v-btn color="error" @click="deleteTicket()">Excluir</v-btn>
         </v-card-actions>
       </v-col>
     </v-row>
@@ -97,8 +100,10 @@
 </template>
 
 <script>
-import * as commentsService from '@/api/commentsService'
 import { mapGetters } from 'vuex'
+import { createComments } from '@/api/commentsService'
+import { patchTicket } from '@/api/ticketService'
+import { ticketStatus } from '@/constants/constants'
 import { formatDate } from '@/utils/utils'
 
 export default {
@@ -117,11 +122,12 @@ export default {
 
   data() {
     return {
-      editing: false,
       content: '',
+      editing: false,
       btnLoading: false,
-      errorMessage: null,
       loading: false,
+      showSnackbar: false,
+      message: null,
     }
   },
 
@@ -140,11 +146,11 @@ export default {
     async fetchTicket(ticketId) {
       try {
         this.loading = true
-        this.errorMessage = null
+        this.message = null
 
         await this.$store.dispatch('tickets/initializeTicketDetails', ticketId)
       } catch (error) {
-        this.errorMessage = error.message
+        this.message = error.message
       } finally {
         this.loading = false
       }
@@ -153,7 +159,7 @@ export default {
     async createComment() {
       try {
         this.btnLoading = true
-        this.errorMessage = null
+        this.message = null
 
         const comment = {
           content: this.content,
@@ -161,14 +167,40 @@ export default {
           createdBy: this.getUserEmail,
         }
 
-        await commentsService.createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
+        await createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
         await this.$store.dispatch('tickets/initializeTicketDetails', this.getCurrentTicket.id)
       } catch (error) {
-        this.errorMessage = error.message
+        this.message = error.message
+        this.showSnackbar = true
       } finally {
         this.btnLoading = false
         this.editing = false
         this.content = ''
+      }
+    },
+
+    async deleteTicket() {
+      try {
+        this.btnLoading = true
+        this.message = null
+
+        await patchTicket(this.getUserIdToken, this.$route.params.id, {
+          status: ticketStatus.deleted,
+          deletedAt: new Date().toISOString(),
+        })
+
+        this.message = 'Ticket excluido.'
+
+        this.$store.commit('tickets/setUpdateTickets', true)
+
+        setTimeout(() => {
+          this.$router.replace({ name: 'dashboard' })
+        }, 700)
+      } catch (error) {
+        this.message = error.message
+      } finally {
+        this.showSnackbar = true
+        this.btnLoading = false
       }
     },
   },

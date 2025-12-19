@@ -2,6 +2,7 @@ import axios from 'axios'
 import { db } from '@/plugins/firebase'
 import { generateNextProtocol } from '@/helpers/generateProtocol'
 import { handleApiError } from '@/utils/errors'
+import { ticketStatus } from '@/constants/constants'
 
 export const createTicket = async (userToken, ticket) => {
   try {
@@ -10,19 +11,10 @@ export const createTicket = async (userToken, ticket) => {
 
     await axios.post(url, {
       ...ticket,
-      status: 'open',
+      status: ticketStatus.waiting,
       createdAt: new Date().toISOString(),
       protocol: protocol,
     })
-  } catch (error) {
-    handleApiError(error)
-  }
-}
-
-export const updateTicket = async (userToken, ticket) => {
-  try {
-    const url = `${db.app.options.databaseURL}/tickets/${ticket.id}.json?auth=${userToken}`
-    await axios.put(url, ticket)
   } catch (error) {
     handleApiError(error)
   }
@@ -68,6 +60,24 @@ export const getTicketLog = async (userToken, ticketId) => {
     )
 
     return response.data
+  } catch (error) {
+    handleApiError(error)
+  }
+}
+
+export const updateTicket = async (userToken, ticket) => {
+  try {
+    const url = `${db.app.options.databaseURL}/tickets/${ticket.id}.json?auth=${userToken}`
+    await axios.put(url, ticket)
+  } catch (error) {
+    handleApiError(error)
+  }
+}
+
+export const patchTicket = async (userToken, ticketId, fields) => {
+  try {
+    const url = `${db.app.options.databaseURL}/tickets/${ticketId}.json?auth=${userToken}`
+    await axios.patch(url, fields)
   } catch (error) {
     handleApiError(error)
   }

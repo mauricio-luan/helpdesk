@@ -1,4 +1,5 @@
 import * as ticketService from '@/api/ticketService'
+import { ticketStatus } from '@/constants/constants'
 
 export default {
   namespaced: true,
@@ -110,7 +111,9 @@ export default {
     },
 
     getAllTickets(state) {
-      return state.tickets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      return state.tickets
+        .filter((ticket) => ticket.status != ticketStatus.deleted)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     },
 
     getTicketById(state) {
