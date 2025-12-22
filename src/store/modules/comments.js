@@ -20,8 +20,7 @@ export default {
   actions: {
     async fetchComments(context, ticketId) {
       try {
-        const userToken = context.rootGetters['auth/getUserIdToken']
-        const comments = await commentsService.getComments(userToken, ticketId)
+        const comments = await commentsService.getComments(ticketId)
 
         context.commit('setComments', comments)
       } catch (error) {

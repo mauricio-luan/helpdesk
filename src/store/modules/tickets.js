@@ -27,8 +27,7 @@ export default {
   actions: {
     async fetchTickets(context) {
       try {
-        const userToken = context.rootGetters['auth/getUserIdToken']
-        const tickets = await ticketService.getTickets(userToken)
+        const tickets = await ticketService.getTickets()
 
         context.commit('setTickets', tickets)
         context.commit('setUpdateTickets', false)
@@ -40,8 +39,7 @@ export default {
 
     async fetchTicket(context, ticketId) {
       try {
-        const userToken = context.rootGetters['auth/getUserIdToken']
-        const ticket = await ticketService.getTicketById(ticketId, userToken)
+        const ticket = await ticketService.getTicketById(ticketId)
 
         context.commit('setCurrentTicket', ticket)
       } catch (error) {
@@ -67,7 +65,6 @@ export default {
     async updateTicket(context, ticket) {
       try {
         const currentTicket = context.getters.getCurrentTicket
-        const userToken = context.rootGetters['auth/getUserIdToken']
 
         const updatedTicketKeys = Object.keys(ticket)
         const ignoredFields = ['authorId', 'authorEmail', 'createdAt', 'id']
@@ -93,8 +90,8 @@ export default {
             log: updatedValues,
           }
 
-          await ticketService.updateTicket(userToken, ticket)
-          await ticketService.createLog(userToken, log)
+          await ticketService.updateTicket(ticket)
+          await ticketService.createLog(log)
 
           await context.dispatch('fetchTickets')
         }

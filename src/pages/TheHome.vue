@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import TheHeader from '@/components/TheHeader.vue'
-import TheMenu from '@/components/TheMenu.vue'
-import TheFooter from '@/components/TheFooter.vue'
+import TheHeader from '@/components/layout/TheHeader.vue'
+import TheMenu from '@/components/layout/TheMenu.vue'
+import TheFooter from '@/components/layout/TheFooter.vue'
 
 export default {
   components: { TheHeader, TheMenu, TheFooter },

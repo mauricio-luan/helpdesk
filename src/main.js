@@ -5,7 +5,7 @@ import store from './store/store'
 import vuetify from './plugins/vuetify'
 
 import App from './App.vue'
-import SnackBar from './components/SnackBar.vue'
+import SnackBar from './components/common/SnackBar.vue'
 
 const app = createApp(App)
 

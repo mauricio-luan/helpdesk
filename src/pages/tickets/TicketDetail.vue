@@ -113,7 +113,6 @@ export default {
 
     if (!memoryId || memoryId !== routeId) {
       this.$store.commit('comments/resetComments')
-      // await this.fetchTicket(routeId)
     } else {
       console.log('debug: cache comments')
     }
@@ -133,7 +132,7 @@ export default {
 
   computed: {
     ...mapGetters('tickets', ['getCurrentTicket', 'ticketContent']),
-    ...mapGetters('auth', ['getUserEmail', 'getUserIdToken']),
+    ...mapGetters('auth', ['getUserEmail']),
   },
 
   methods: {
@@ -151,12 +150,15 @@ export default {
         await this.$store.dispatch('tickets/initializeTicketDetails', ticketId)
       } catch (error) {
         this.message = error.message
+        this.showSnackbar = true
       } finally {
         this.loading = false
       }
     },
 
     async createComment() {
+      if (!this.content.trim()) return
+
       try {
         this.btnLoading = true
         this.message = null
@@ -167,7 +169,7 @@ export default {
           createdBy: this.getUserEmail,
         }
 
-        await createComments(this.getUserIdToken, comment, this.getCurrentTicket.id)
+        await createComments(comment, this.getCurrentTicket.id)
         await this.$store.dispatch('tickets/initializeTicketDetails', this.getCurrentTicket.id)
       } catch (error) {
         this.message = error.message
@@ -180,16 +182,19 @@ export default {
     },
 
     async deleteTicket() {
+      if (!confirm('Tem certeza que deseja excluir este ticket?')) return
+
       try {
         this.btnLoading = true
         this.message = null
 
-        await patchTicket(this.getUserIdToken, this.$route.params.id, {
+        await patchTicket(this.$route.params.id, {
           status: ticketStatus.deleted,
           deletedAt: new Date().toISOString(),
         })
 
         this.message = 'Ticket excluido.'
+        this.showSnackbar = true
 
         this.$store.commit('tickets/setUpdateTickets', true)
 
@@ -198,8 +203,8 @@ export default {
         }, 700)
       } catch (error) {
         this.message = error.message
-      } finally {
         this.showSnackbar = true
+      } finally {
         this.btnLoading = false
       }
     },

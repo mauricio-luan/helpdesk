@@ -25,22 +25,22 @@ const router = createRouter({
         {
           path: 'newticket',
           name: 'newticket',
-          component: () => import('@/pages/TicketForm.vue'),
+          component: () => import('@/pages/tickets/TicketForm.vue'),
         },
         {
           path: 'ticket/:id',
           name: 'ticket-detail',
-          component: () => import('@/pages/TicketDetail.vue'),
+          component: () => import('@/pages/tickets/TicketDetail.vue'),
         },
         {
           path: 'edit/:id',
           name: 'edit-ticket',
-          component: () => import('@/pages/TicketEdit.vue'),
+          component: () => import('@/pages/tickets/TicketEdit.vue'),
         },
         {
           path: 'history/:id',
           name: 'ticket-history',
-          component: () => import('@/pages/TicketHistory.vue'),
+          component: () => import('@/pages/tickets/TicketHistory.vue'),
         },
       ],
     },
@@ -52,12 +52,12 @@ const router = createRouter({
         {
           path: '',
           name: 'login',
-          component: () => import('@/components/LoginForm.vue'),
+          component: () => import('@/components/auth/LoginForm.vue'),
         },
         {
           path: 'register',
           name: 'register',
-          component: () => import('@/pages/TheAuth.vue'),
+          component: () => import('@/pages/auth/TheAuth.vue'),
         },
       ],
     },

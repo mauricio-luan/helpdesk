@@ -26,6 +26,7 @@
 
 <script>
 import { formatDate } from '@/utils/utils'
+import { ticketStatus } from '@/constants/constants'
 
 export default {
   props: {
@@ -34,6 +35,12 @@ export default {
 
   methods: {
     formatDate: formatDate,
+  },
+
+  computed: {
+    ticketStatusColor(ticket) {
+      return ticketStatus[ticket]
+    },
   },
 }
 </script>

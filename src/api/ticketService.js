@@ -1,15 +1,13 @@
-import axios from 'axios'
-import { db } from '@/plugins/firebase'
+import api from '@/api/axios'
 import { generateNextProtocol } from '@/helpers/generateProtocol'
 import { handleApiError } from '@/utils/errors'
 import { ticketStatus } from '@/constants/constants'
 
-export const createTicket = async (userToken, ticket) => {
+export const createTicket = async (ticket) => {
   try {
-    const url = `${db.app.options.databaseURL}/tickets.json?auth=${userToken}`
     const protocol = await generateNextProtocol()
 
-    await axios.post(url, {
+    await api.post('/tickets.json', {
       ...ticket,
       status: ticketStatus.waiting,
       createdAt: new Date().toISOString(),
@@ -20,18 +18,17 @@ export const createTicket = async (userToken, ticket) => {
   }
 }
 
-export const createLog = async (userToken, ticketLog) => {
+export const createLog = async (ticketLog) => {
   try {
-    const url = `${db.app.options.databaseURL}/ticket-history/${ticketLog.ticketId}.json?auth=${userToken}`
-    await axios.post(url, ticketLog)
+    await api.post(`/ticket-history/${ticketLog.ticketId}.json`, ticketLog)
   } catch (error) {
     handleApiError(error)
   }
 }
 
-export const getTickets = async (userToken) => {
+export const getTickets = async () => {
   try {
-    const response = await axios.get(`${db.app.options.databaseURL}/tickets.json?auth=${userToken}`)
+    const response = await api.get('/tickets.json')
 
     if (response.data === null) return []
 
@@ -41,11 +38,9 @@ export const getTickets = async (userToken) => {
   }
 }
 
-export const getTicketById = async (ticketId, userToken) => {
+export const getTicketById = async (ticketId) => {
   try {
-    const response = await axios.get(
-      `${db.app.options.databaseURL}/tickets/${ticketId}.json?auth=${userToken}`,
-    )
+    const response = await api.get(`/tickets/${ticketId}.json`)
 
     return { id: ticketId, ...response.data }
   } catch (error) {
@@ -53,31 +48,29 @@ export const getTicketById = async (ticketId, userToken) => {
   }
 }
 
-export const getTicketLog = async (userToken, ticketId) => {
+export const getTicketLog = async (ticketId) => {
   try {
-    const response = await axios.get(
-      `${db.app.options.databaseURL}/ticket-history/${ticketId}.json?auth=${userToken}`,
-    )
+    const response = await api.get(`/ticket-history/${ticketId}.json`)
 
-    return response.data
+    if (response.data === null) return []
+
+    return Object.entries(response.data).map(([id, data]) => ({ id, ...data }))
   } catch (error) {
     handleApiError(error)
   }
 }
 
-export const updateTicket = async (userToken, ticket) => {
+export const updateTicket = async (ticket) => {
   try {
-    const url = `${db.app.options.databaseURL}/tickets/${ticket.id}.json?auth=${userToken}`
-    await axios.put(url, ticket)
+    await api.put(`/tickets/${ticket.id}.json`, ticket)
   } catch (error) {
     handleApiError(error)
   }
 }
 
-export const patchTicket = async (userToken, ticketId, fields) => {
+export const patchTicket = async (ticketId, fields) => {
   try {
-    const url = `${db.app.options.databaseURL}/tickets/${ticketId}.json?auth=${userToken}`
-    await axios.patch(url, fields)
+    await api.patch(`/tickets/${ticketId}.json`, fields)
   } catch (error) {
     handleApiError(error)
   }

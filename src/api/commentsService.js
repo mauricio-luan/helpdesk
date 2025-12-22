@@ -1,20 +1,17 @@
-import axios from 'axios'
-import { db } from '@/plugins/firebase'
+import api from '@/api/axios'
 import { handleApiError } from '@/utils/errors'
 
-export const createComments = async (userToken, payload, ticketId) => {
+export const createComments = async (payload, ticketId) => {
   try {
-    const url = `${db.app.options.databaseURL}/ticket-comments/${ticketId}.json?auth=${userToken}`
-    await axios.post(url, payload)
+    await api.post(`/ticket-comments/${ticketId}.json`, payload)
   } catch (error) {
     handleApiError(error)
   }
 }
 
-export const getComments = async (userToken, ticketId) => {
+export const getComments = async (ticketId) => {
   try {
-    const url = `${db.app.options.databaseURL}/ticket-comments/${ticketId}.json?auth=${userToken}`
-    const response = await axios.get(url)
+    const response = await api.get(`/ticket-comments/${ticketId}.json`)
 
     if (response.data === null) return []
 

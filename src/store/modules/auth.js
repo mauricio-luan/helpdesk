@@ -32,20 +32,31 @@ export default {
       try {
         const data = await authService.signin(payload)
 
-        context.commit('login', {
+        const user = {
           userId: data.localId,
           idToken: data.idToken,
           expiresIn: data.expiresIn,
           email: payload.email,
           isLogged: true,
-        })
+        }
+
+        localStorage.setItem('user', JSON.stringify(user))
+        context.commit('login', user)
       } catch (err) {
         console.error(err.details)
         throw err
       }
     },
 
+    tryAutoLogin(context) {
+      const user = localStorage.getItem('user')
+      if (user) {
+        context.commit('login', JSON.parse(user))
+      }
+    },
+
     logoff(context) {
+      localStorage.removeItem('user')
       context.commit('logoff')
     },
   },

@@ -1,7 +1,10 @@
 <template>
   <v-container>
     <v-form @submit.prevent="submitForm()">
-      <h2>Editando ticket #protocol do ticket aqui</h2>
+      <h2 class="mb-5">
+        {{ form.protocol ? form.protocol : 'Sem protocolo' }} -
+        {{ form.title }}
+      </h2>
 
       <v-row>
         <v-col cols="8">
@@ -37,10 +40,17 @@
             type="submit"
           />
           <!-- colocar botão de finalizar ticket aqui -->
-          <v-btn color="error" prepend-icon="mdi-close-circle" text="Finalizar" class="ml-4" />
+          <v-btn
+            color="error"
+            prepend-icon="mdi-close-circle"
+            text="Cancelar"
+            class="ml-4"
+            @click="$router.back()"
+          />
         </v-col>
       </v-row>
     </v-form>
+    <SnackBar v-if="message" v-model:snackbar="showSnackbar" :text="message" />
   </v-container>
 </template>
 
@@ -51,10 +61,10 @@ import { ticketConstants } from '@/constants/constants'
 export default {
   data() {
     return {
-      priorities: Object.values(ticketConstants),
       form: {},
       loading: false,
-      errorMessage: '',
+      message: null,
+      showSnackbar: false,
     }
   },
 
@@ -64,25 +74,24 @@ export default {
 
   computed: {
     ...mapGetters('tickets', ['getTicketById', 'getCurrentTicket']),
-    ...mapGetters('auth', ['getUserIdToken', 'getUserId']),
+    ...mapGetters('auth', ['getUserId']),
+
+    priorities() {
+      return Object.values(ticketConstants)
+    },
   },
 
   methods: {
     async getTicketData(ticketId) {
       try {
         this.loading = true
+        this.message = null
 
-        const ticketData = this.getTicketById(ticketId)
-
-        if (!ticketData || ticketData === undefined) {
-          await this.$store.dispatch('tickets/fetchTicket', ticketId)
-          this.form = { ...this.getCurrentTicket }
-          return
-        }
-
-        this.form = { ...ticketData }
+        await this.$store.dispatch('tickets/fetchTicket', ticketId)
+        this.form = { ...this.getCurrentTicket }
       } catch (error) {
-        this.errorMessage = error
+        this.message = error.message || 'Erro ao carregar ticket'
+        this.showSnackbar = true
       } finally {
         this.loading = false
       }
@@ -90,11 +99,14 @@ export default {
 
     async submitForm() {
       try {
+        this.loading = true
         await this.$store.dispatch('tickets/updateTicket', { ...this.form })
         this.$router.replace({ name: 'ticket-detail', params: { id: this.$route.params.id } })
       } catch (error) {
         console.error(error)
-        throw error
+        this.message = error.message || 'Erro ao salvar alterações'
+        this.showSnackbar = true
+        this.loading = false
       }
     },
   },

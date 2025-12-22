@@ -1,3 +1,4 @@
+import api from '@/api/axios'
 import axios from 'axios'
 import { db } from '@/plugins/firebase'
 import { handleApiError } from '@/utils/errors'
@@ -41,9 +42,7 @@ export const signin = async (payload) => {
 
 const saveUser = async (payload) => {
   try {
-    const url = `${db.app.options.databaseURL}/users/${payload.localId}.json`
-
-    await axios.put(url, payload)
+    await api.put(`/users/${payload.localId}.json`, payload)
   } catch (error) {
     handleApiError(error)
   }
